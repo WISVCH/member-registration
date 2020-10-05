@@ -7,19 +7,6 @@ import (
 	"net/http"
 )
 
-type formParams struct {
-	FirstName string `form:"fname" binding:"required"`
-	LastName  string `form:"lastname" binding:"required"`
-	FullName string `form:"full_name" binding:"required"`
-	BirthDate string `form:"birthdate" binding:"required"`
-}
-
-type MemberInformation struct {
-	formParams formParams
-	hasPayed   bool
-	IsApproved bool
-}
-
 func MemberFormHandler(i entities.HandlerInteractor) func(c *gin.Context) {
 	return func(c *gin.Context) {
 		var form entities.FormEntity

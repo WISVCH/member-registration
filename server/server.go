@@ -9,6 +9,7 @@ import (
 	"github.com/WISVCH/member-registration/server/utils/auth"
 	"github.com/gin-gonic/gin"
 	"github.com/jmoiron/sqlx"
+	"github.com/GeertJohan/go.rice"
 	"strconv"
 )
 
@@ -47,6 +48,9 @@ func newServer(port int, debug bool, hi entities.HandlerInteractor, c config.Con
 
 	r := server.Router
 	r.LoadHTMLGlob("./resources/templates/*")
+	// servers other static files
+	staticBox := rice.MustFindBox("../resources/static")
+	r.StaticFS("static", staticBox.HTTPBox())
 
 	hi.RegisterDefaultMiddleware(r)
 	registerPublicRoutes(r.Group(""), hi)

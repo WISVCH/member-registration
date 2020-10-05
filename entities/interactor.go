@@ -7,6 +7,7 @@ import (
 type DBRepo interface {
 	AddFormEntry(f FormEntity) error
 	ListForms() ([]FormEntity, error)
+	GetFormEntity(int) (FormEntity, error)
 }
 
 type MiddlewareRegisterable interface {
