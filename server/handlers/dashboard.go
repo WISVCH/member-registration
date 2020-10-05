@@ -21,7 +21,7 @@ func Formlist(i entities.HandlerInteractor) func(c *gin.Context) {
 
 func SubmitForm(i entities.HandlerInteractor, config config.Config) func(c *gin.Context){
 	return func(c *gin.Context) {
-		http.Post(config.DienstApiUrl) // TODO
+		//http.Post(config.DienstApiUrl, ) // TODO
 		var forms, err = i.DB.ListForms()
 		if err != nil{
 			fmt.Print(err)

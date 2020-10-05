@@ -4,6 +4,7 @@ CREATE TABLE "form_content" (
     "id" SERIAL UNIQUE PRIMARY KEY,
     "gender" varchar NOT NULL,
     "first_name" varchar NOT NULL,
+    "preposition" varchar NULL,
     "last_name" varchar NOT NULL,
     "email" varchar UNIQUE NOT NULL,
     "phone_number" varchar NOT NULL,

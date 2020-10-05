@@ -10,6 +10,7 @@ import (
 type formParams struct {
 	FirstName string `form:"fname" binding:"required"`
 	LastName  string `form:"lastname" binding:"required"`
+	FullName string `form:"full_name" binding:"required"`
 	BirthDate string `form:"birthdate" binding:"required"`
 }
 
