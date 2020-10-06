@@ -30,7 +30,8 @@ CREATE TABLE "form_content" (
     "added_to_ldb" boolean NOT NULL DEFAULT false,
     "freshmen_weekend" boolean NOT NULL DEFAULT false,
     "paid_status" varchar,
-    "amount_paid" decimal NOT NULL DEFAULT 0.0,
+    "amount_paid" integer NOT NULL DEFAULT 0,
+    "date_paid"  timestamp,
     "created_at" timestamp NOT NULL DEFAULT (now())
 );
 

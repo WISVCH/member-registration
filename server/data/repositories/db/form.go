@@ -50,7 +50,7 @@ func dbFields(values interface{}) []string {
 	if v.Kind() == reflect.Struct {
 		for i := 0; i < v.NumField(); i++ {
 			var field = v.Type().Field(i).Tag.Get("db")
-			if field != "" {
+			if field != "" && field != "id"{
 				fields = append(fields, field)
 			}
 		}

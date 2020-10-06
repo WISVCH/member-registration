@@ -10,6 +10,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"time"
 )
 
 func Formlist(i entities.HandlerInteractor) func(c *gin.Context) {
@@ -18,31 +19,36 @@ func Formlist(i entities.HandlerInteractor) func(c *gin.Context) {
 		if err != nil {
 			fmt.Print(err)
 		}
-
-		c.IndentedJSON(http.StatusOK, gin.H{"formdata": forms})
+		c.HTML(http.StatusOK, "formList.tmpl", gin.H{"formdata": forms})
 	}
 }
 
 func getFormJson(f entities.FormEntity) string {
+	const TIMEFORMAT = "2006-01-02"
 	var countryCode = countries.ByName(f.Country)
 	var	preposition = ""
 	if f.Preposition != nil {
 		preposition = *f.Preposition
 	}
+	var startDate = time.Now().Format(TIMEFORMAT)
+	var endDate = time.Now().AddDate(5,0,0).Format(TIMEFORMAT)
+	var datePaid = startDate
+	if f.DatePaid != nil {
+		datePaid = f.DatePaid.Format(TIMEFORMAT)
+	}
+
 	return fmt.Sprintf(`{
 		"revision_comment": "init",
 		"member": {
-        "person": "3",
-        "date_from": null,
-        "date_to": null,
-        "date_paid": null,
-        "amount_paid": null,
+        "date_from": "%s",
+        "date_to": "%s",
+        "date_paid": "%s",
+        "amount_paid": "%d",
         "merit_date_from": null,
         "merit_invitations": false,
         "honorary_date_from": null
     },
 		"student": {
-			"person": "3",
 			"enrolled": "t",
 			"study": "%s",
 			"first_year": "0",
@@ -50,9 +56,8 @@ func getFormJson(f entities.FormEntity) string {
 			"emergency_name": "%s",
 			"emergency_phone": "%s",
 			"yearbook_permission": "%s",
-			"date_verified": null
+			"date_verified": "%s"
 	},"alumnus": {
-        "person": "3",
         "study": "",
         "study_first_year": null,
         "study_last_year": null,
@@ -65,7 +70,6 @@ func getFormJson(f entities.FormEntity) string {
         "contact_method": "m"
     },
     "employee": {
-        "person": "3",
         "faculty": "EEMCS",
         "department": "t",
         "function": "t",
@@ -104,8 +108,9 @@ func getFormJson(f entities.FormEntity) string {
 		"linkedin_id": "",
 		"facebook_id": ""
 	}`,
-		f.Study, f.StudentNumber, f.EmergencyName, f.EmergencyPhone, translateBool(f.YearBookPer),
-		f.StreetName, f.HouseNumber, f.PostCode, f.City,
+		startDate, endDate, datePaid, f.AmountPaid, f.Study, f.StudentNumber,
+		f.EmergencyName, f.EmergencyPhone, translateBool(f.YearBookPer),
+		startDate, f.StreetName, f.HouseNumber, f.PostCode, f.City,
 		countryCode.Alpha2(), f.Email, translateBool(f.Machazine), translateBool(f.YearBookPer), f.Initials, f.FirstName,
 		preposition, f.LastName, f.PhoneMobile, f.Gender, f.BirthDate,
 		translateBool(f.ActivityMail), translateBool(f.EducationMail), translateBool(f.YearBookPer), f.NetID)
@@ -148,6 +153,6 @@ func SubmitForm(i entities.HandlerInteractor, config config.Config) func(c *gin.
 		body, _ := ioutil.ReadAll(resp.Body)
 		fmt.Println("response Body:", string(body))
 
-		c.IndentedJSON(http.StatusOK, gin.H{"body": body})
+		c.IndentedJSON(http.StatusOK, jsonStr)
 	}
 }

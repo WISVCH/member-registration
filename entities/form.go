@@ -34,6 +34,7 @@ type FormEntity struct {
 	Added           bool      `db:"added_to_ldb"`
 	FreshMenWeekend bool      `db:"freshmen_weekend" form:"freshmen_weekend"`
 	PaidStatus     *string    `db:"paid_status"`
-	AmountPaid     float64    `db:"amount_paid"`
+	AmountPaid      int    `db:"amount_paid"`
+	DatePaid        *time.Time `db:"date_paid"`
 	CreatedAt       time.Time `db:"created_at"`
 }
