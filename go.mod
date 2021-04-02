@@ -3,6 +3,8 @@ module github.com/WISVCH/member-registration
 go 1.14
 
 require (
+	github.com/GeertJohan/go.rice v1.0.0
+	github.com/biter777/countries v1.3.2
 	github.com/coreos/go-oidc v2.2.1+incompatible
 	github.com/gin-gonic/gin v1.5.0
 	github.com/golang-migrate/migrate/v4 v4.7.1
@@ -13,6 +15,5 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/viper v1.3.2
 	golang.org/x/oauth2 v0.0.0-20190402181905-9f3314589c9a
-	google.golang.org/genproto v0.0.0-20190425155659-357c62f0e4bb
 	gopkg.in/square/go-jose.v2 v2.4.1 // indirect
 )

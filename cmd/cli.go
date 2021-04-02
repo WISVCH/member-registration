@@ -14,11 +14,11 @@ var (
 	dbMigrateDirection = ""
 	config             = cfg.GetConfig()
 	rootCmd            = &cobra.Command{
-		Use:   "fantescy",
-		Short: "The backend for FantESCy",
-		Long:  `The backend application for the FantESCy project`,
+		Use:   "memberregistration",
+		Short: "The backend for memberregistration",
+		Long:  `The backend application for the memberregistration project`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println("The FantESCy CLI tool. Run with --help for commands.")
+			fmt.Println("The memberregistration CLI tool. Run with --help for commands.")
 		},
 	}
 )

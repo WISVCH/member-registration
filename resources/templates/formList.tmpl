@@ -1,0 +1,79 @@
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+	<meta name="description" content="">
+	<meta name="author" content="">
+	{{/*<link rel="icon" href="@{/images/favicon.png}">*/}}
+
+	<title>CH </title>
+
+	<!--Bootstrap core CSS -->
+	<link rel="stylesheet"
+		  href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+		  integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+		  crossorigin="anonymous">
+	<link href="https://wisvch.github.io/bootstrap-theme/dist/css/bootstrap.min.css" rel="stylesheet">
+	<link href="/static/css/dashboard.css" rel="stylesheet">
+	<link href="/static/css/wisvch-dashboard.css" rel="stylesheet">
+	<link rel="stylesheet" href="static/font-awesome-4.7.0/css/fontawesome.min.css">
+</head>
+
+<br>
+ {{range .formdata}}
+	<div >first name: {{.FirstName}}</div>
+
+	<div >last name: {{.LastName}}</div>
+
+	<div >gender: {{.Gender}}</div>
+	<div >study: {{.Study}}</div>
+	<div >Start year: {{.StartYear}}</div>
+
+	<div >email: {{.Email}}</div>
+
+	<div >BirthDate: {{.BirthDate}}</div>
+
+	<div >phone number: {{.PhoneMobile}}</div>
+
+	<div >full_name: {{.FullName}}</div>
+
+	<div >first_letters: {{.Initials}}</div>
+
+	<div >street_name: {{.StreetName}}</div>
+
+	<div >street_number: {{.HouseNumber}}</div>
+
+	<div >postal_code: {{.PostCode}}</div>
+
+	<div >city: {{.City}}</div>
+
+	<div >country: {{.Country}}</div>
+
+	<div >netid: {{.NetID}}</div>
+
+	<div >Student number: {{.StudentNumber}}</div>
+
+	<div >Emergency contact name: {{.EmergencyName}}</div>
+
+	<div >Emergency contact phone number: {{.EmergencyPhone}}</div>
+
+	<div >yearbook_permission: {{.YearBookPer}}</div>
+
+	<div >activity_mail: {{.ActivityMail}}</div>
+
+	<div >career_mail: {{.CareerMail}}</div>
+
+	<div >education_mail: {{.EducationMail}}</div>
+
+	<div >machazine: {{.Machazine}}</div>
+
+	<div >freshmen_weekend: {{.FreshMenWeekend}}</div>
+		<a href="/admin/submit/form/{{.Id}}">submit</a>
+    <br/>
+{{end}}
+</body>
+
+</html>
