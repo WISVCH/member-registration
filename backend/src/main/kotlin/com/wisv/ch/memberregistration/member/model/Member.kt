@@ -56,9 +56,10 @@ class Member {
 	var city: String = ""
 	var country: String = ""
 	var email: String = ""
+	var emailConfirmed: Boolean = false
 	var telephoneNumber: String = ""
 	var study: Study = Study.BACHELOR_MATHEMATICS
-	var studentNumber: Int = 0
+	var studentNumber: Int = 0 // You can mail a student with this information by using <studynumber>@studienummer.tudelft.nl as template
 	var netID: String = ""
 	var emergencyContactName: String = ""
 	var emergencyContactNumber: String = ""
