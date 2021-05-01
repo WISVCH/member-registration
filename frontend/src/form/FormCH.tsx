@@ -1,4 +1,4 @@
-import {Button, Checkbox, ControlLabel, FormControl, FormGroup, HelpBlock} from "react-bootstrap";
+import {Alert, Button, Checkbox, ControlLabel, FormControl, FormGroup, HelpBlock} from "react-bootstrap";
 import React, {FormEvent, Fragment} from "react";
 import {getNames, getCodes} from "country-list";
 import axios from "axios";
@@ -30,8 +30,13 @@ interface FormTypes {
 	machazine: boolean,
 }
 
+function validateEmail(email: string)
+{
+	var re = /\S+@\S+\.\S+/;
+	return re.test(email);
+}
 
-class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: boolean }> {
+class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: boolean, isChangeStarted: Map<String, boolean> }> {
 	constructor(props: {}, context: any) {
 		super(props, context);
 
@@ -40,6 +45,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 		this.submit = this.submit.bind(this)
 
 		this.state = {
+			isChangeStarted: new Map<String, boolean>(),
 			formValues: {
 				initials: "",
 				firstname: "",
@@ -54,7 +60,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 				country: "",
 				email: "",
 				phoneMobile: "",
-				study: "",
+				study: "BACHELOR_COMPUTER_SCIENCE",
 				studentNumber: "",
 				netid: "",
 				emergencyName: "",
@@ -68,6 +74,16 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 	}
 
 	getValidationState(value: string) {
+		const checkPresent = ["initials", "firstname", "preposition", "surname", "birthdate", "streetName", "houseNumber", "postCode", "city", "email", "phoneMobile", "studentNumber", "netid", "emergencyName", "emergencyPhone"]
+		if (this.state.isChangeStarted.get(value)) {
+			// @ts-ignore
+			if (checkPresent.includes(value) && this.state.formValues[value].length === 0) {
+				return "error"
+			}
+			if (value === "email" && !validateEmail(this.state.formValues[value])) {
+				return "error"
+			}
+		}
 		return null;
 	}
 
@@ -82,6 +98,9 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 			newFormValues[formName] = e.currentTarget.value;
 			await this.setState({formValues: newFormValues});
 		}
+		let newMap = this.state.isChangeStarted;
+		newMap.set(formName,true);
+		this.setState({isChangeStarted: newMap})
 	}
 
 	createFormGroup(formValue: string, title: string, helpBlock?: string, customType?: string) {
@@ -95,6 +114,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 				value={`${this.state.formValues[formValue]}`}
 				placeholder={`Type ${title} here`}
 				onChange={(e) => this.handleChange(e, formValue)}
+				required
 			/>
 			<FormControl.Feedback/>
 			{helpBlock ? <HelpBlock>{helpBlock}</HelpBlock> : ''}
@@ -123,15 +143,20 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 	}
 
 	async submit() {
-		let answer = await axios.post('http://localhost:9000/api/members', this.state.formValues);
-		if (answer.status === 200) {
-
+		let answer;
+		try {
+			answer = await axios.post('http://localhost:9000/api/members', this.state.formValues);
+		} catch (e: any) {
+			this.setState({sendStatus: answer?.status === 200});
+			return;
 		}
+		this.setState({sendStatus: answer?.status === 200});
 	}
+
 
 	render() {
 		const zip = (a: any[], b: { [x: string]: any; }) => a.map((k, i) => [k, b[i]]);
-		const buttonStyle = this.state.sendStatus === undefined ? "" : (this.state.sendStatus ? "success" : "danger");
+		const buttonStyle = this.state.sendStatus === undefined ? "" : (this.state.sendStatus ? "btn-success" : "btn-danger");
 		return (
 			<Fragment>
 				<form>
@@ -157,8 +182,11 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 					{this.createFormGroupCheckBox("mailCareer", "I want to subscribe to the CH career mail")}
 					{this.createFormGroupCheckBox("mailEducation", "I want to subscribe to the CH education mail")}
 					{this.createFormGroupCheckBox("machazine", "I want to receive the quarterly CH maCHazine")}
+					{buttonStyle === "btn-danger" ? <Alert bsStyle="danger">
+						<strong>Error!</strong> Not everything is filled in correctly.
+					</Alert> : ""}
+					<Button onClick={this.submit} className={`${buttonStyle}`}>Submit</Button>
 				</form>
-				<Button onClick={this.submit} className={"button"} bsStyle={buttonStyle}>Submit</Button>
 			</Fragment>
 		);
 	}
