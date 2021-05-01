@@ -1,0 +1,49 @@
+## SPRING SETTINGS
+spring:
+    main:
+        allow-bean-definition-overriding: true
+    thymeleaf:
+        mode: HTML5
+        encoding: UTF-8
+
+    data.jpa.repositories.enabled: true
+    datasource:
+        driver-class-name: org.postgresql.Driver
+        url: jdbc:postgresql://localhost:5432/memberregistration
+        username: memberregistration
+        password: memberregistration
+    jpa:
+        database: postgresql
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        generate-ddl: true
+        hibernate.ddl-auto: create
+        properties.hibernate.default_schema: PUBLIC
+        show-sql: false
+
+server:
+    port: 9000
+    servlet:
+        context-path: /api
+
+
+# Spring Boot Actuator endpoint settings
+management:
+    endpoints:
+        web:
+            base-path: /management
+    endpoint:
+        logfile:
+            enabled: true
+
+# CH Connect Configuration
+wisvch.connect:
+    issuerUri: https://connect.ch.tudelft.nl
+    clientUri: http://localhost:9000/member
+
+    # Change <MyLDAPgroup> to a LDAP group you're in (e.g. hoothub, dienst2, etc.)
+    admin-groups: hoothub
+
+# CH Payments Configuration
+wisvch.payments:
+    issuerUri: http://localhost:8080/payments
+    clientUri: http://localhost:9000/member
