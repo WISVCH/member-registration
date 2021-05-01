@@ -19,6 +19,21 @@ spring:
         hibernate.ddl-auto: create
         properties.hibernate.default_schema: PUBLIC
         show-sql: false
+    security:
+        oauth2:
+            client:
+                provider:
+                    wisvchconnect:
+                        issuer-uri: https://connect.ch.tudelft.nl
+                registration:
+                    wisvchconnect:
+                        client-id: localhost-spring-dev
+                        client-secret: Hvw51WUpYdSRhJ6hrxNSNQyXK0jv3M6-dRxVhfUhEuVz9PvH8hVMz51SeGajsIVT_C5l0KyzjrnfvNyGzbiW3A
+                        scope:
+                            - openid
+                            - profile
+                            - email
+                            - ldap
 
 server:
     port: 9000
@@ -35,11 +50,7 @@ management:
         logfile:
             enabled: true
 
-# CH Connect Configuration
 wisvch.connect:
-    issuerUri: https://connect.ch.tudelft.nl
-    clientUri: http://localhost:9000/member
-
     # Change <MyLDAPgroup> to a LDAP group you're in (e.g. hoothub, dienst2, etc.)
     admin-groups: hoothub
 

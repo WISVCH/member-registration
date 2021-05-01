@@ -37,6 +37,7 @@ dependencies {
 
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
 
+
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
