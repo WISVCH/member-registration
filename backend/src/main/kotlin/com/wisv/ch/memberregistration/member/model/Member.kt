@@ -4,6 +4,7 @@ import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
 import com.wisv.ch.memberregistration.study.model.Study
 import lombok.Data
 import lombok.NoArgsConstructor
+import org.jetbrains.annotations.NotNull
 import java.time.Instant
 import java.util.*
 import javax.persistence.*
@@ -45,27 +46,27 @@ class Member {
 	var id: Long = 0
 
 	var initials: String = ""
-	var firstName: String = ""
-	var surNamePreFix: String = ""
-	var lastName: String = ""
+	var firstname: String = ""
+	var preposition: String = ""
+	var surname: String = ""
 	var gender: String = ""
-	var birthDate: Date = Date.from(Instant.now())
-	var street: String = ""
+	var birthdate: Date = Date.from(Instant.now())
+	var streetName: String = ""
 	var houseNumber: String = ""
-	var postalCode: String = ""
+	var postCode: String = ""
 	var city: String = ""
 	var country: String = ""
 	var email: String = ""
 	var emailConfirmed: Boolean = false
-	var telephoneNumber: String = ""
+	var phoneMobile: String = ""
 	var study: Study = Study.BACHELOR_MATHEMATICS
 	var studentNumber: Int = 0 // You can mail a student with this information by using <studynumber>@studienummer.tudelft.nl as template
-	var netID: String = ""
-	var emergencyContactName: String = ""
-	var emergencyContactNumber: String = ""
-	var activityMail: Boolean = false
-	var careerMail: Boolean = false
-	var educationMail: Boolean = false
+	var netid: String = ""
+	var emergencyName: String = ""
+	var emergencyPhone: String = ""
+	var mailActivity: Boolean = false
+	var mailCareer: Boolean = false
+	var mailEducation: Boolean = false
 	var machazine: Boolean = false
 	var addedToLdb: Boolean = false
 	var paidStatus: PaidStatus = PaidStatus.WAITING
