@@ -1,6 +1,7 @@
 package com.wisv.ch.memberregistration.security
 
 import org.springframework.boot.context.properties.ConfigurationProperties
+import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
@@ -12,6 +13,11 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.oidc.OidcIdToken
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.web.servlet.config.annotation.CorsRegistry
+import org.springframework.web.cors.CorsConfiguration
+import org.springframework.web.cors.CorsConfigurationSource
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource
+
 
 /**
  * CH Connect Security Configuration
@@ -29,11 +35,21 @@ class CHConnectSecurityConfiguration : WebSecurityConfigurerAdapter() {
 	@Throws(Exception::class)
 	override fun configure(http: HttpSecurity?) {
 		http
+			?.cors()
+			?.and()
+			?.csrf()?.disable()
 			?.authorizeRequests()
 			?.antMatchers("/admin/**")?.hasRole("ADMIN")
 			?.anyRequest()?.permitAll()
 			?.and()
 			?.oauth2Login()?.userInfoEndpoint()?.oidcUserService(oidcUserService())
+	}
+
+	@Bean
+	fun corsConfigurationSource(): CorsConfigurationSource? {
+		val source = UrlBasedCorsConfigurationSource()
+		source.registerCorsConfiguration("/**", CorsConfiguration().applyPermitDefaultValues())
+		return source
 	}
 
 	private fun oidcUserService(): OAuth2UserService<OidcUserRequest?, OidcUser?>? {

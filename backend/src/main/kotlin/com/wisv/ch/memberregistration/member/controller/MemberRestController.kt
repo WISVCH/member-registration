@@ -17,5 +17,4 @@ class MemberRestController(val memberService: MemberService) {
 		memberService.addMember(input);
 		return createResponseEntity(HttpStatus.OK, "User successfully added to database.");
 	}
-
 }
