@@ -2,11 +2,24 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import backgroundImage from './resources/bg.jpg';
 import reportWebVitals from './reportWebVitals';
+import {createGlobalStyle} from "styled-components";
+
+const GlobalStyle = createGlobalStyle`
+  body {
+		background: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)) , url(${backgroundImage}) no-repeat center center;
+    	background-size: cover;
+    	background-attachment: fixed;
+    	height: 100%;
+    	overflow-x: hidden;
+  	}
+`
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+	  <GlobalStyle/>
+	  <App />
   </React.StrictMode>,
   document.getElementById('root')
 );
