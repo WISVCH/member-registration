@@ -36,6 +36,8 @@ dependencies {
 	implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
 
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
+	implementation("com.squareup.okhttp3:okhttp:4.9.1")
+
 
 
 	compileOnly("org.projectlombok:lombok")
