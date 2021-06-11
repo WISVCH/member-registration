@@ -3,6 +3,7 @@ import React, {FormEvent, Fragment} from "react";
 import {Redirect} from "react-router-dom";
 import {getNames, getCodes} from "country-list";
 import axios from "axios";
+import {ServerDomain} from "../App";
 
 interface FormTypes {
 	[index: string]: string | boolean,
@@ -147,7 +148,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 	async submit() {
 		let answer;
 		try {
-			answer = await axios.post('http://localhost:9000/api/members', this.state.formValues);
+			answer = await axios.post(`${ServerDomain}/api/members`, this.state.formValues);
 		} catch (e: any) {
 			this.setState({sendStatus: answer?.status === 200});
 			this.setState({redirect: answer?.status === 200});
