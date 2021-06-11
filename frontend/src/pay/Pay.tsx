@@ -15,7 +15,7 @@ const products = [
 const getPaymentsInfo = async (name: string, email: string, products: string[], paymentprovider: string) => {
 	let answer : any;
 	try {
-		answer = await axios.post(`${ServerDomain}/api/members`, {
+		answer = await axios.post(`${ServerDomain}/api/payment`, {
 			name: name,
 			email: email,
 			productKeys: products,
@@ -25,7 +25,7 @@ const getPaymentsInfo = async (name: string, email: string, products: string[], 
 	} catch (e) {
 		return {error: "something went wrong! Please try again later!", url: undefined}
 	}
-	window.location.href = answer.url;
+	window.location.href = answer.data.url;
 }
 
 

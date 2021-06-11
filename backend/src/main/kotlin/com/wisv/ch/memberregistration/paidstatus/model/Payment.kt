@@ -1,6 +1,7 @@
 package com.wisv.ch.memberregistration.paidstatus.model
 
 import com.wisv.ch.memberregistration.member.model.Member
+import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 import javax.persistence.*
@@ -19,6 +20,6 @@ class Payment {
 	lateinit var member: Member
 
 	var publicReference: String = ""
-	var paymentStatus: String = ""
+	var paymentStatus: PaidStatus = PaidStatus.CANCELLED
 	var product: String = ""
 }

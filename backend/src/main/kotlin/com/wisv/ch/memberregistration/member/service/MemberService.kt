@@ -6,4 +6,6 @@ interface MemberService {
 	fun getAllNotInLDB(): List<Member>
 
 	fun addMember(member: Member)
+
+	fun getMemberByEmail(email: String): Member
 }

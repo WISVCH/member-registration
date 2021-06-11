@@ -12,3 +12,5 @@ class PaymentDTO {
 	val returnUrl: String = ""
 	val method: String = ""
 }
+
+
