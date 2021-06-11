@@ -1,5 +1,6 @@
 import {Alert, Button, Checkbox, ControlLabel, FormControl, FormGroup, HelpBlock} from "react-bootstrap";
 import React, {FormEvent, Fragment} from "react";
+import {Redirect} from "react-router-dom";
 import {getNames, getCodes} from "country-list";
 import axios from "axios";
 
@@ -36,8 +37,8 @@ function validateEmail(email: string)
 	return re.test(email);
 }
 
-class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: boolean, isChangeStarted: Map<String, boolean> }> {
-	constructor(props: {}, context: any) {
+class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: boolean, isChangeStarted: Map<String, boolean>, redirect: boolean}> {
+	constructor(props: any, context: any) {
 		super(props, context);
 
 		this.handleChange = this.handleChange.bind(this);
@@ -46,6 +47,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 
 		this.state = {
 			isChangeStarted: new Map<String, boolean>(),
+			redirect: false,
 			formValues: {
 				initials: "",
 				firstname: "",
@@ -148,8 +150,10 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 			answer = await axios.post('http://localhost:9000/api/members', this.state.formValues);
 		} catch (e: any) {
 			this.setState({sendStatus: answer?.status === 200});
+			this.setState({redirect: answer?.status === 200});
 			return;
 		}
+		this.setState({redirect: answer?.status === 200});
 		this.setState({sendStatus: answer?.status === 200});
 	}
 
@@ -158,6 +162,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 		const zip = (a: any[], b: { [x: string]: any; }) => a.map((k, i) => [k, b[i]]);
 		const buttonStyle = this.state.sendStatus === undefined ? "" : (this.state.sendStatus ? "btn-success" : "btn-danger");
 		return (
+			!this.state.redirect ?
 			<Fragment>
 				<form>
 					{this.createFormGroup("initials", "Initials", "All the first letters of your first names separated by points.")}
@@ -188,6 +193,15 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 					<Button onClick={this.submit} className={`${buttonStyle}`}>Submit</Button>
 				</form>
 			</Fragment>
+				:
+				<Redirect to={{
+					pathname: "/pay",
+					state: {
+						name: `${this.state.formValues.firstname} ${this.state.formValues.preposition} ${this.state.formValues.surname}`,
+						email: this.state.formValues.email
+							}
+
+				}}/>
 		);
 	}
 }

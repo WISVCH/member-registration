@@ -8,6 +8,8 @@ import {
 	Switch,
 	Route,
 } from "react-router-dom";
+import PayPage from "./pay/Pay";
+import OrderComplete from "./orderComplete/OrderComplete";
 
 const Background = styled.div`
 	width: 100vw;
@@ -45,14 +47,15 @@ function App() {
 			<Background>
 				<Box>
 					<Switch>
-						<Route path="/pay">
-							<Splash/>
-						</Route>
+						<Route path="/pay" render={(props) => <PayPage {...props}/>}/>
 						<Route path="/form">
 							<Form/>
 						</Route>
 						<Route path="/">
 							<Splash/>
+						</Route>
+						<Route path="/orderComplete">
+							<OrderComplete/>
 						</Route>
 					</Switch>
 
@@ -70,5 +73,7 @@ function Form() {
 		</div>
 	)
 }
+
+export const ServerDomain = "http://localhost:9000"
 
 export default App;
