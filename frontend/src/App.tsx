@@ -10,6 +10,7 @@ import {
 } from "react-router-dom";
 import PayPage from "./pay/Pay";
 import OrderComplete from "./orderComplete/OrderComplete";
+import TableView from "./backend/TableView";
 
 const Background = styled.div`
 	width: 100vw;
@@ -51,11 +52,14 @@ function App() {
 						<Route path="/form">
 							<Form/>
 						</Route>
-						<Route path="/">
-							<Splash/>
+						<Route path="/admin/overview">
+							<TableView/>
 						</Route>
 						<Route path="/orderComplete">
 							<OrderComplete/>
+						</Route>
+						<Route path="/">
+							<Splash/>
 						</Route>
 					</Switch>
 
