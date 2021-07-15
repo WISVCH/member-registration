@@ -4,6 +4,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.context.annotation.Profile
+import org.springframework.http.HttpStatus
 import org.springframework.security.config.annotation.web.builders.HttpSecurity
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter
@@ -13,6 +14,7 @@ import org.springframework.security.oauth2.client.userinfo.OAuth2UserService
 import org.springframework.security.oauth2.core.oidc.OidcIdToken
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser
 import org.springframework.security.oauth2.core.oidc.user.OidcUser
+import org.springframework.security.web.authentication.HttpStatusEntryPoint
 import org.springframework.web.servlet.config.annotation.CorsRegistry
 import org.springframework.web.cors.CorsConfiguration
 import org.springframework.web.cors.CorsConfigurationSource
@@ -41,6 +43,8 @@ class CHConnectSecurityConfiguration : WebSecurityConfigurerAdapter() {
 			?.authorizeRequests()
 			?.antMatchers("/admin/**")?.hasRole("ADMIN")
 			?.anyRequest()?.permitAll()
+			?.and()
+			?.exceptionHandling()?.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
 			?.and()
 			?.oauth2Login()?.userInfoEndpoint()?.oidcUserService(oidcUserService())
 	}

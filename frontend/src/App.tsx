@@ -49,24 +49,40 @@ function App() {
 				<Route path="/admin/overview">
 					<TableView/>
 				</Route>
-				<Background>
-					<Box>
-						<Route path="/orderComplete">
+				<Route path="/orderComplete">
+					<Background>
+						<Box>
 							<OrderComplete/>
-						</Route>
-						<Route path="/">
-							<Splash/>
-						</Route>
-						<Route path="/pay" render={(props) => <PayPage {...props}/>}/>
-						<Route path="/form">
+						</Box>
+					</Background>
+				</Route>
+				<Route path="/pay" render={(props) => (
+					<Background>
+						<Box>
+							<PayPage {...props}/>
+						</Box>
+					</Background>
+				)}/>
+				<Route path="/form">
+					<Background>
+						<Box>
 							<Form/>
-						</Route>
-					</Box>
-				</Background>
+						</Box>
+					</Background>
+				</Route>
+				<Route exact path="/">
+					<Background>
+						<Box>
+							<Splash/>
+						</Box>
+					</Background>
+				</Route>
 			</Switch>
 		</Router>
-	);
+	)
+		;
 }
+
 
 function Form() {
 	return (
@@ -76,7 +92,5 @@ function Form() {
 		</div>
 	)
 }
-
-export const ServerDomain = ""
 
 export default App;

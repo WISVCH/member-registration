@@ -3,9 +3,8 @@ import React, {useState} from 'react'
 import styled from 'styled-components'
 import {usePagination, useRowSelect, useTable} from 'react-table'
 import axios from "axios";
-import {ServerDomain} from "../App";
-import { convertArrayToCSV } from 'convert-array-to-csv';
-import {Button, ButtonGroup, ButtonToolbar, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import {convertArrayToCSV} from 'convert-array-to-csv';
+import {Button, ButtonGroup, ButtonToolbar} from "react-bootstrap";
 import convertToDienst from "./convertToDienstFormat";
 
 
@@ -79,15 +78,6 @@ const Box = styled.div`
 	}
 	
 `
-const requestData = async (unhandled) => {
-	try {
-		const req = await axios.get(`${ServerDomain}/api/admin/members/${unhandled ? "unhandled" : "all"}`);
-		return req.data
-	} catch (e) {
-		console.error(e)
-	}
-	return []
-}
 
 const exportCSV = (data) => {
 	const csvString = convertArrayToCSV(convertToDienst(data))
@@ -100,9 +90,9 @@ const exportCSV = (data) => {
 }
 
 const addToDienst = (data) => { // TODO proper error handling
-	data.forEach( netid => {
+	data.forEach(netid => {
 		try {
-			axios.get(`${ServerDomain}/api/admin/members/dienst/${netid}`);
+			axios.get(`/api/admin/members/dienst/${netid}`);
 		} catch (e) {
 			console.error(e)
 		}
@@ -147,7 +137,7 @@ function Table({columns, data}) {
 		previousPage,
 		setPageSize,
 		selectedFlatRows,
-		state: {pageIndex, pageSize, selectedRowIds},
+		state: {pageIndex, pageSize},
 	} = useTable({
 			columns,
 			data,
@@ -265,17 +255,30 @@ function Table({columns, data}) {
 
 function App() {
 
-	const [data, setData] = useState( [{name: ""}]);
-	const [unhandled, setUnhandled] = useState(false)
-	const values = ["initials", "firstname", "preposition", "surname", "gender", "birthdate", "streetName", "houseNumber", "postCode", "city", "country", "email", "emailConfirmed", "phoneMobile", "study", "studentNumber", "netid", "id", "emergencyName", "emergencyPhone", "mailActivity", "mailCareer", "mailEducation", "machazine", "addedToLdb", "paidStatus", "paidDate"]
-	const shownValues = ["firstname", "preposition", "surname", "streetName", "houseNumber", "postCode", "city", "country", "email", "netid", "studentNumber"]
-	const columns = React.useMemo(
-		() => shownValues.map(x => {
-			return {
-				Header: x,
-				accessor: x,
+	const requestData = async (unhandled) => {
+		let req;
+		try {
+			req = await axios.get(`/api/admin/members/${unhandled ? "unhandled" : "all"}`);
+		} catch (reason) {
+			if (reason.response!.status === 401) {
+				window.location.href = `http://connect.ch.tudelft.nl/login?redirect_uri=${window.location.href}`
 			}
-		}),
+		}
+		return req.data
+	}
+
+	const [data, setData] = useState([{}]);
+	const [unhandled, setUnhandled] = useState(false)
+	const columns = React.useMemo(
+		() => {
+			const shownValues = ["firstname", "preposition", "surname", "streetName", "houseNumber", "postCode", "city", "country", "email", "netid", "studentNumber"]
+			return shownValues.map(x => {
+				return {
+					Header: x,
+					accessor: x,
+				}
+			})
+		},
 		[]
 	)
 
@@ -293,6 +296,7 @@ function App() {
 			<ButtonGroup>
 				<Button onClick={() => setUnhandled(!unhandled)}>{unhandled ? "All" : "Unhandled"}</Button>
 			</ButtonGroup>
+			{`currently showing all ${unhandled ? "" : "unhandled"} entries`}
 			<Styles>
 				<Table columns={columns} data={data}/>
 			</Styles>

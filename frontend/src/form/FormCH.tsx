@@ -3,7 +3,7 @@ import React, {FormEvent, Fragment} from "react";
 import {Redirect} from "react-router-dom";
 import {getNames, getCodes} from "country-list";
 import axios from "axios";
-import {ServerDomain} from "../App";
+import styled from "styled-components";
 
 interface FormTypes {
 	[index: string]: string | boolean,
@@ -33,10 +33,22 @@ interface FormTypes {
 	machazine: boolean,
 }
 
+const ShorterLabel = styled(ControlLabel)`
+	display: inline-block;
+	margin-right: 2rem;
+`
+
+const ShorterCheckBox = styled(Checkbox)`
+`
+
 function validateEmail(email: string)
 {
 	var re = /\S+@\S+\.\S+/;
 	return re.test(email);
+}
+
+function validateNetId(netid: string) {
+	return !netid.includes("@") && !netid.includes(".")
 }
 
 class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: boolean, isChangeStarted: Map<String, boolean>, redirect: boolean}> {
@@ -86,6 +98,12 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 				return "error"
 			}
 			if (value === "email" && !validateEmail(this.state.formValues[value])) {
+				return "error"
+			}
+			if (value === "netid" && !validateNetId(this.state.formValues[value])) {
+				return "error"
+			}
+			if (value === "studentNumber" && !/[0-9]{7}/.test(this.state.formValues[value])){
 				return "error"
 			}
 		}
@@ -141,8 +159,8 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 		let ch: boolean = this.state.formValues[formValue];
 
 		return (<FormGroup controlId="formValue">
-			<ControlLabel>{title}</ControlLabel>
-			<Checkbox inline checked={ch}
+			<ShorterLabel>{title}</ShorterLabel>
+			<ShorterCheckBox inline checked={ch}
 					  onChange={(e) => this.handleChange(e, formValue)}/>
 		</FormGroup>)
 	}
@@ -150,7 +168,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 	async submit() {
 		let answer;
 		try {
-			answer = await axios.post(`${ServerDomain}/api/members`, this.state.formValues);
+			answer = await axios.post(`/api/members`, this.state.formValues);
 		} catch (e: any) {
 			this.setState({sendStatus: answer?.status === 200});
 			this.setState({redirect: answer?.status === 200});
@@ -182,9 +200,9 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 					{this.createFormGroup("email", "Email", undefined, "email")}
 					{this.createFormGroup("phoneMobile", "Mobile phone number")}
 					{this.createFormGroupDropDown("study", "Study", zip(["BACHELOR_MATHEMATICS", "BACHELOR_COMPUTER_SCIENCE", "MASTER_MATHEMATICS", "MASTER_EMBEDDED_SYSTEMS", "MASTER_COMPUTER_SCIENCE"], ["Bachelor Applied Mathematics", "Bachelor Computer Science and Engineering", "Master Applied Mathematics", "Master Embedded Systems", "Master Computer Science and Engineering"]))}
-					{this.createFormGroup("studyYear", "first year of study")}
-					{this.createFormGroup("studentNumber", "Student Number")}
-					{this.createFormGroup("netid", "Netid")}
+					{this.createFormGroup("studyYear", "first year of study", "In which year will/did you start your study at one of the studies of CH?")}
+					{this.createFormGroup("studentNumber", "Student Number", "Your stunt number this is a seven numbers long id given to you by TU Delft. DO NOT MIX THIS UP WITH NETID")}
+					{this.createFormGroup("netid", "Netid", "Your netid that is given by the TU. Example: if your student mail is chuygens@student.tudelft.nl, then your netid is chuygens.")}
 					{this.createFormGroup("emergencyName", "Emergency contact name")}
 					{this.createFormGroup("emergencyPhone", "Emergency contact phone number")}
 					{this.createFormGroupCheckBox("mailActivity", "I want to subscribe to the CH activity mail")}

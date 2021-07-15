@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { useHistory } from "react-router-dom"
 import IdealLogo from './../resources/ideal.png';
 import SofortLogo from './../resources/sofort.png';
-import {ServerDomain} from '../App';
 import axios from "axios";
 
 const products = [
@@ -15,7 +14,7 @@ const products = [
 const getPaymentsInfo = async (name: string, email: string, products: string[], paymentprovider: string) => {
 	let answer : any;
 	try {
-		answer = await axios.post(`${ServerDomain}/api/payment`, {
+		answer = await axios.post(`/api/payment`, {
 			name: name,
 			email: email,
 			productKeys: products,
