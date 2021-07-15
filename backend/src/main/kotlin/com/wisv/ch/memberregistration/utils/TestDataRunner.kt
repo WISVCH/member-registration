@@ -20,6 +20,7 @@ class TestDataRunner(val memberRepository: MemberRepository, val paymentReposito
 	@EventListener
 	fun onStartEvent(event: ApplicationStartedEvent) {
 		val bram = Member("B.T.", "Bram", "van", "Kooten", "Male", Date.from(Instant.now()), "Mekelweg", "4", "2628CD", "Delft", "NL", "secretaris@ch.tudelft.nl", false, "0152782532", Study.BACHELOR_COMPUTER_SCIENCE, 2016,1111111, "bvankooten")
+		bram.paidStatus = PaidStatus.PAID
 		memberRepository.save(bram)
 		memberRepository.save(Member("C", "Christiaan", "", "Huygens", "Male", Date.from(Instant.now()), "Mekelweg", "4", "2628CD", "Delft", "NL", "secretaris@ch.tudelft.nl", false, "0152782532", Study.BACHELOR_COMPUTER_SCIENCE, 2017,2222222, "chuygens"))
 		memberRepository.save(Member("J.M.C.", "Julian", "van", "Dijk", "Male", Date.from(Instant.now()), "Mekelweg", "4", "2628CD", "Delft", "NL", "secretaris@ch.tudelft.nl", false, "0152782532", Study.BACHELOR_COMPUTER_SCIENCE, 2017,3333333, "jmcvandijk"))

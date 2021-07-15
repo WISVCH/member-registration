@@ -111,7 +111,8 @@ class MemberAdminRestController(val memberService: MemberService, val memberRepo
 		val response: Response = call.execute()
 		return if (response.code == 201) {
 			member.addedToLdb = true
-			memberRepository.save(member)
+			memberRepository.saveAndFlush(member)
+			System.out.println(member.addedToLdb)
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.OK, "User successfully added to dienst ldb.");
 		} else {
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response.body?.string() ?: "");

@@ -58,7 +58,7 @@ class PaymentController(val memberService: MemberService, val paymentRepository:
 		payment.paymentStatus = paymentStatus
 		payment.product = product
 		payment.publicReference = publicReference
-		paymentRepository.save(payment)
+		paymentRepository.saveAndFlush(payment)
 
 		return jsonData
 	}

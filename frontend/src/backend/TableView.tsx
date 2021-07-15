@@ -102,7 +102,7 @@ const exportCSV = (data) => {
 const addToDienst = (data) => { // TODO proper error handling
 	data.forEach( netid => {
 		try {
-			await axios.get(`${ServerDomain}/api/admin/members/${netid}`);
+			axios.get(`${ServerDomain}/api/admin/members/dienst/${netid}`);
 		} catch (e) {
 			console.error(e)
 		}
