@@ -7,7 +7,6 @@ import {ServerDomain} from "../App";
 import { convertArrayToCSV } from 'convert-array-to-csv';
 import {Button, ButtonGroup, ButtonToolbar, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
 import convertToDienst from "./convertToDienstFormat";
-import convertToDienstFormat from "./convertToDienstFormat";
 
 
 const Styles = styled.div`
@@ -98,20 +97,6 @@ const exportCSV = (data) => {
 	element.download = "ledenExport.csv";
 	document.body.appendChild(element); // Required for this to work in FireFox
 	element.click();
-
-}
-
-const callDienst = async (data) => {
-	try {
-		console.log(JSON.stringify(convertToDienst(data)[0]))
-		const req = await axios.post(`http://localhost:8000/ldb/api/v3/people/`, convertToDienst(data)[0], {headers: {
-				'Content-Type': 'application/json',
-				"Authorization": "Token 71ee66e2648a49ade0c8db7a5b4837f05a048328"
-			}});
-		return req.data
-	} catch (e) {
-		console.error(e)
-	}
 
 }
 
@@ -258,10 +243,7 @@ function Table({columns, data}) {
 					<Button onClick={() => exportCSV(selectedFlatRows.map(
 						d => d.original
 					))}>Export selection to CSV</Button>
-					<Button onClick={() => {callDienst(selectedFlatRows.map(
-						d => d.original
-					))}}> verneuk dienst</Button>
-
+					
 				</ButtonToolbar>
 				<pre>
 				  <code>

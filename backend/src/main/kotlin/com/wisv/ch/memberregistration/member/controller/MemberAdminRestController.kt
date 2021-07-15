@@ -1,6 +1,7 @@
 package com.wisv.ch.memberregistration.member.controller
 
 import com.wisv.ch.memberregistration.member.model.Member
+import com.wisv.ch.memberregistration.member.service.MemberRepository
 import com.wisv.ch.memberregistration.member.service.MemberService
 import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
 import com.wisv.ch.memberregistration.paidstatus.model.Payment
@@ -18,7 +19,7 @@ import java.util.*
 
 @RestController
 @RequestMapping("/admin/members")
-class MemberAdminRestController(val memberService: MemberService, val paymentRepository: PaymentRepository) {
+class MemberAdminRestController(val memberService: MemberService, val memberRepository: MemberRepository, val paymentRepository: PaymentRepository) {
 	val client = OkHttpClient()
 
 
@@ -109,6 +110,8 @@ class MemberAdminRestController(val memberService: MemberService, val paymentRep
 		val call: Call = client.newCall(request)
 		val response: Response = call.execute()
 		return if (response.code == 201) {
+			member.addedToLdb = true
+			memberRepository.save(member)
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.OK, "User successfully added to dienst ldb.");
 		} else {
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response.body?.string() ?: "");
