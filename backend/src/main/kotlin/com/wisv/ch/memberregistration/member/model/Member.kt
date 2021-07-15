@@ -2,6 +2,7 @@ package com.wisv.ch.memberregistration.member.model
 
 import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
 import com.wisv.ch.memberregistration.study.model.Study
+import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 import org.jetbrains.annotations.NotNull
@@ -35,11 +36,31 @@ import javax.persistence.*
 // initials, first name, tussenvoegsel (opt), achternaam, geslacht, geboortedatum, straat, huisnummer, postcode, stad, land, email, telephone number,
 // study, student number, netid, emergency_contact ( name and number), activity, career and education mailing, machazine, added_to_ldb, paid, paid_date, member_since, member_till (member_since + 5),
 
+@AllArgsConstructor
 @Entity
 @Data
 @NoArgsConstructor
 @Table
 class Member {
+	constructor(initials: String, firstname: String, preposition: String, surname: String, gender: String, birthdate: Date, streetName: String, houseNumber: String, postCode: String, city: String, country: String, email: String, emailConfirmed: Boolean, phoneMobile: String, study: Study, studentNumber: Int, netid: String) {
+		this.initials = initials
+		this.firstname = firstname
+		this.preposition = preposition
+		this.surname = surname
+		this.gender = gender
+		this.birthdate = birthdate
+		this.streetName = streetName
+		this.houseNumber = houseNumber
+		this.postCode = postCode
+		this.city = city
+		this.country = country
+		this.email = email
+		this.emailConfirmed = emailConfirmed
+		this.phoneMobile = phoneMobile
+		this.study = study
+		this.studentNumber = studentNumber
+		this.netid = netid
+	}
 
 	@Id
 	@GeneratedValue

@@ -1,0 +1,25 @@
+package com.wisv.ch.memberregistration.utils
+
+import com.wisv.ch.memberregistration.member.model.Member
+import com.wisv.ch.memberregistration.member.service.MemberRepository
+import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
+import com.wisv.ch.memberregistration.study.model.Study
+import org.springframework.boot.context.event.ApplicationStartedEvent
+import org.springframework.context.annotation.Profile
+import org.springframework.context.event.EventListener
+import org.springframework.stereotype.Component
+import java.time.Instant
+import java.util.*
+
+@Component
+@Profile("dev")
+class TestDataRunner(val memberRepository: MemberRepository) {
+
+	@EventListener
+	fun onStartEvent(event: ApplicationStartedEvent) {
+		memberRepository.save(Member("B.T.", "Bram", "van", "Kooten", "Male", Date.from(Instant.now()), "Mekelweg", "4", "2628CD", "Delft", "NL", "secretaris@ch.tudelft.nl", false, "0152782532", Study.BACHELOR_COMPUTER_SCIENCE, 1111111, "bvankooten"))
+		memberRepository.save(Member("C", "Christiaan", "", "Huygens", "Male", Date.from(Instant.now()), "Mekelweg", "4", "2628CD", "Delft", "NL", "secretaris@ch.tudelft.nl", false, "0152782532", Study.BACHELOR_COMPUTER_SCIENCE, 2222222, "chuygens"))
+		memberRepository.save(Member("J.M.C.", "Julian", "van", "Dijk", "Male", Date.from(Instant.now()), "Mekelweg", "4", "2628CD", "Delft", "NL", "secretaris@ch.tudelft.nl", false, "0152782532", Study.BACHELOR_COMPUTER_SCIENCE, 3333333, "jmcvandijk"))
+	}
+
+}
