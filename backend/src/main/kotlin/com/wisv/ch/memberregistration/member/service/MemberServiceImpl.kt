@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 class MemberServiceImpl(val memberRepository: MemberRepository) : MemberService {
 
 	private fun verifyDienst(member : Member) : Boolean {
-		return true;
+		return true
 	}
 
 	override fun getAllNotInLDB(): List<Member> {
@@ -19,7 +19,7 @@ class MemberServiceImpl(val memberRepository: MemberRepository) : MemberService 
 
 	override fun addMember(member: Member) {
 		if (verifyDienst(member)) {
-			memberRepository.save(member);
+			memberRepository.saveAndFlush(member);
 		} else {
 			throw AlreadyInDienstException(member);
 		}

@@ -54,6 +54,10 @@ wisvch.connect:
     # Change <MyLDAPgroup> to a LDAP group you're in (e.g. hoothub, dienst2, etc.)
     admin-groups: hoothub
 
+dienst:
+    url: http://localhost:8000
+    token: 71ee66e2648a49ade0c8db7a5b4837f05a048328
+
 # CH Payments Configuration
 wisvch.payments:
     issuerUri: http://localhost:8080/payments
