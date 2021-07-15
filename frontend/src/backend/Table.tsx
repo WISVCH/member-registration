@@ -1,7 +1,8 @@
 // @ts-nocheck
-import React from "react";
+import React, {useState} from "react";
 import {usePagination, useRowSelect, useTable} from "react-table";
-import {Button, ButtonToolbar} from "react-bootstrap";
+import {Alert, Button, ButtonGroup, ButtonToolbar} from "react-bootstrap";
+import styled from "styled-components";
 
 const IndeterminateCheckbox = React.forwardRef(
 	// @ts-ignore
@@ -70,6 +71,7 @@ function Table({columns, data, exportCsv, addToDienst}) {
 				...columns,
 			])
 		})
+	const [showAlert, setShowAlert] = useState(false)
 
 	// Render the UI for your table
 	return (
@@ -146,13 +148,48 @@ function Table({columns, data, exportCsv, addToDienst}) {
 					<Button onClick={() => exportCSV(selectedFlatRows.map(
 						d => d.original
 					))}>Export selection to CSV</Button>
-					<Button onClick={() => addToDienst(selectedFlatRows.map(
-						d => d.original.netid
-					))}>Add selection to LDB</Button>
-
+					<Button onClick={() => setShowAlert(true)}>Add selection to LDB</Button>
 				</ButtonToolbar>
+				{showAlert ? (<Alert bsStyle="danger" onDismiss={() => setShowAlert(false)}>
+					<h4>Check your selection!</h4>
+					<p>
+						You are about to add the selected members to the leden database are you sure you want to
+						continue?
+						Please double check your selection it takes manual work to reverse this action!
+					</p>
+					<p>
+						<ButtonToolbar>
+							<ButtonGroup>
+								<CustomWarning className="btn-danger" onClick={() => {
+									setShowAlert(false)
+									addToDienst(selectedFlatRows.map(
+										d => d.original.netid
+									))
+								}}>I read this message and double checked my selection</CustomWarning>
+							</ButtonGroup>
+							<ButtonGroup>
+								<span> or </span>
+							</ButtonGroup>
+							<ButtonGroup>
+								<StyledButton onClick={() => setShowAlert(false)}>Cancel</StyledButton>
+							</ButtonGroup>
+						</ButtonToolbar>
+					</p>
+				</Alert>) : ""}
 			</div>
 		</>
 	)
 }
+
+const StyledButton = styled(Button)`
+	border-radius: 10px;
+`
+
+const CustomWarning = styled(StyledButton)`
+ &:hover {
+ 	background-color: #d43f3a !important;
+ }
+ 
+`
+
 export default Table;
