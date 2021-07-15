@@ -2,6 +2,7 @@ package com.wisv.ch.memberregistration.member.service;
 
 import com.wisv.ch.memberregistration.exception.AlreadyInDienstException;
 import com.wisv.ch.memberregistration.member.model.Member;
+import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
 import org.springframework.data.domain.PageRequest
 import org.springframework.stereotype.Service;
 
@@ -13,7 +14,7 @@ class MemberServiceImpl(val memberRepository: MemberRepository) : MemberService 
 	}
 
 	override fun getAllNotInLDB(): List<Member> {
-		return memberRepository.findAllByAddedToLdb(false);
+		return memberRepository.findAllByAddedToLdbAndPaidStatus(false, PaidStatus.PAID);
 	}
 
 	override fun addMember(member: Member) {
@@ -28,7 +29,11 @@ class MemberServiceImpl(val memberRepository: MemberRepository) : MemberService 
 		return memberRepository.findByEmail(email)
 	}
 
-	override fun getAllMembers(page: Int, pageSize: Int): List<Member> {
-		return memberRepository.findAll(PageRequest.of(page,pageSize)).content
+	override fun getAllMembers(): List<Member> {
+		return memberRepository.findAll()
+	}
+
+	override fun getMemberByNetId(netid: String): Member {
+		return memberRepository.findByNetid(netid)
 	}
 }

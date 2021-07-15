@@ -9,5 +9,7 @@ interface MemberService {
 
 	fun getMemberByEmail(email: String): Member
 
-	fun getAllMembers(page: Int, pageSize: Int): List<Member>
+	fun getMemberByNetId(netid: String): Member
+
+	fun getAllMembers(): List<Member>
 }

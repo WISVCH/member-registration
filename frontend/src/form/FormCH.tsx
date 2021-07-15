@@ -22,6 +22,7 @@ interface FormTypes {
 	email: string,
 	phoneMobile: string,
 	study: string,
+	studyYear: string,
 	studentNumber: string,
 	netid: string,
 	emergencyName: string,
@@ -64,6 +65,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 				email: "",
 				phoneMobile: "",
 				study: "BACHELOR_COMPUTER_SCIENCE",
+				studyYear: "",
 				studentNumber: "",
 				netid: "",
 				emergencyName: "",
@@ -180,6 +182,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 					{this.createFormGroup("email", "Email", undefined, "email")}
 					{this.createFormGroup("phoneMobile", "Mobile phone number")}
 					{this.createFormGroupDropDown("study", "Study", zip(["BACHELOR_MATHEMATICS", "BACHELOR_COMPUTER_SCIENCE", "MASTER_MATHEMATICS", "MASTER_EMBEDDED_SYSTEMS", "MASTER_COMPUTER_SCIENCE"], ["Bachelor Applied Mathematics", "Bachelor Computer Science and Engineering", "Master Applied Mathematics", "Master Embedded Systems", "Master Computer Science and Engineering"]))}
+					{this.createFormGroup("studyYear", "first year of study")}
 					{this.createFormGroup("studentNumber", "Student Number")}
 					{this.createFormGroup("netid", "Netid")}
 					{this.createFormGroup("emergencyName", "Emergency contact name")}

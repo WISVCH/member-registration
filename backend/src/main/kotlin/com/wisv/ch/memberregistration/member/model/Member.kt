@@ -42,7 +42,7 @@ import javax.persistence.*
 @NoArgsConstructor
 @Table
 class Member {
-	constructor(initials: String, firstname: String, preposition: String, surname: String, gender: String, birthdate: Date, streetName: String, houseNumber: String, postCode: String, city: String, country: String, email: String, emailConfirmed: Boolean, phoneMobile: String, study: Study, studentNumber: Int, netid: String) {
+	constructor(initials: String, firstname: String, preposition: String, surname: String, gender: String, birthdate: Date, streetName: String, houseNumber: String, postCode: String, city: String, country: String, email: String, emailConfirmed: Boolean, phoneMobile: String, study: Study, studyYear: Int, studentNumber: Int, netid: String) {
 		this.initials = initials
 		this.firstname = firstname
 		this.preposition = preposition
@@ -58,6 +58,7 @@ class Member {
 		this.emailConfirmed = emailConfirmed
 		this.phoneMobile = phoneMobile
 		this.study = study
+		this.studyYear = studyYear
 		this.studentNumber = studentNumber
 		this.netid = netid
 	}
@@ -81,6 +82,7 @@ class Member {
 	var emailConfirmed: Boolean = false
 	var phoneMobile: String = ""
 	var study: Study = Study.BACHELOR_MATHEMATICS
+	var studyYear: Int = 0
 	var studentNumber: Int = 0 // You can mail a student with this information by using <studynumber>@studienummer.tudelft.nl as template
 	var netid: String = ""
 	var emergencyName: String = ""

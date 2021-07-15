@@ -27,8 +27,8 @@ spring:
                         issuer-uri: https://connect.ch.tudelft.nl
                 registration:
                     wisvchconnect:
-                        client-id: localhost-spring-dev
-                        client-secret: Hvw51WUpYdSRhJ6hrxNSNQyXK0jv3M6-dRxVhfUhEuVz9PvH8hVMz51SeGajsIVT_C5l0KyzjrnfvNyGzbiW3A
+                        client-id: 241c4ff1-4496-4ce5-8dfe-92900c98f9c7
+                        client-secret: SeuvWzzu5KkJ75Yl6VXr50Py9FvT7ziXJfGT0Xcc2dUNlJ5EdQKJCz8e7CKQhJm9UaNe2NnoOFr9FRP32LazxA
                         scope:
                             - openid
                             - profile

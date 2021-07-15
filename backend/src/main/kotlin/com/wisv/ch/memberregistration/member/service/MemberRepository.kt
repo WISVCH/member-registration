@@ -9,8 +9,10 @@ import org.springframework.stereotype.Repository
 interface MemberRepository : JpaRepository<Member, Long>{
 	fun findAllByPaidStatus(paidStatus: PaidStatus): List<Member>
 
-	fun findAllByAddedToLdb(addedToLdb: Boolean): List<Member>
+	fun findAllByAddedToLdbAndPaidStatus(addedToLdb: Boolean, paidStatus: PaidStatus): List<Member>
 
 	fun findByEmail(email: String): Member
+
+	fun findByNetid(netid: String): Member
 
 }

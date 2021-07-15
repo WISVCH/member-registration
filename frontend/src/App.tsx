@@ -45,26 +45,25 @@ const Logo = styled.img`
 function App() {
 	return (
 		<Router>
-			<Background>
-				<Box>
-					<Switch>
-						<Route path="/pay" render={(props) => <PayPage {...props}/>}/>
-						<Route path="/form">
-							<Form/>
-						</Route>
-						<Route path="/admin/overview">
-							<TableView/>
-						</Route>
+			<Switch>
+				<Route path="/admin/overview">
+					<TableView/>
+				</Route>
+				<Background>
+					<Box>
 						<Route path="/orderComplete">
 							<OrderComplete/>
 						</Route>
 						<Route path="/">
 							<Splash/>
 						</Route>
-					</Switch>
-
-				</Box>
-			</Background>
+						<Route path="/pay" render={(props) => <PayPage {...props}/>}/>
+						<Route path="/form">
+							<Form/>
+						</Route>
+					</Box>
+				</Background>
+			</Switch>
 		</Router>
 	);
 }
@@ -78,6 +77,6 @@ function Form() {
 	)
 }
 
-export const ServerDomain = "http://localhost:9000"
+export const ServerDomain = ""
 
 export default App;

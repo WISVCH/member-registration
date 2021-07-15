@@ -11,6 +11,16 @@ import javax.persistence.*
 @NoArgsConstructor
 @Table
 class Payment {
+	constructor(){
+
+	}
+
+	constructor(member: Member, publicReference: String, paymentStatus: PaidStatus, product: String) {
+		this.member = member
+		this.publicReference = publicReference
+		this.paymentStatus = paymentStatus
+		this.product = product
+	}
 
 	@Id
 	@GeneratedValue

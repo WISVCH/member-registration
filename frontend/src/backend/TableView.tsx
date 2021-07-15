@@ -4,15 +4,33 @@ import styled from 'styled-components'
 import {usePagination, useRowSelect, useTable} from 'react-table'
 import axios from "axios";
 import {ServerDomain} from "../App";
-import {Button, ButtonToolbar, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import { convertArrayToCSV } from 'convert-array-to-csv';
+import {Button, ButtonGroup, ButtonToolbar, Dropdown, DropdownButton, MenuItem} from "react-bootstrap";
+import convertToDienst from "./convertToDienstFormat";
+import convertToDienstFormat from "./convertToDienstFormat";
 
 
 const Styles = styled.div`
-  padding: 1rem;
+  /* This is required to make the table full-width */
+  display: block;
+  margin-top: 2%;
+  margin-left: 6%;
+  max-width: 88%;
+
+
+  /* This will make the table scrollable when it gets too small */
+  .tableWrap {
+    display: block;
+    max-width: 100%;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    border-bottom: 1px solid black;
+  }
 
   table {
+    /* Make sure the inner table is always as wide as needed */
+    width: 100%;
     border-spacing: 0;
-    border: 1px solid black;
 
     tr {
       :last-child {
@@ -29,30 +47,77 @@ const Styles = styled.div`
       border-bottom: 1px solid black;
       border-right: 1px solid black;
 
+      /* The secret sauce */
+      /* Each cell should grow equally */
+      width: 1%;
+      /* But "collapsed" cells should be as small as possible */
+      &.collapse {
+        width: 0.0000000001%;
+      }
+
       :last-child {
         border-right: 0;
       }
     }
   }
+
+  .pagination {
+    padding: 0.5rem;
+  }
 `
 
-const requestData = async () => {
+const Box = styled.div`
+	background-color: rgba(255, 255, 255, 0.5);
+	margin-left: 4%;
+	margin-top: 1%;
+	width: 90%;
+	height: auto;
+	padding: 1% 1%;
+	border-radius: 10px;
+	@media screen and (max-width: 768px) {
+		width: 100%;
+		margin: 0;
+	}
+	
+`
+const requestData = async (unhandled) => {
 	try {
-		const req = await axios.get(`${ServerDomain}/api/admin/members`);
+		const req = await axios.get(`${ServerDomain}/api/admin/members/${unhandled ? "unhandled" : "all"}`);
 		return req.data
 	} catch (e) {
 		console.error(e)
 	}
-	let list = []
-	for(var i = 0; i < 10000; i++) {
-		list.push({name:`name ${i}`})
+	return []
+}
+
+const exportCSV = (data) => {
+	const csvString = convertArrayToCSV(convertToDienst(data))
+	const element = document.createElement("a");
+	const file = new Blob([csvString], {type: 'text/plain'});
+	element.href = URL.createObjectURL(file);
+	element.download = "ledenExport.csv";
+	document.body.appendChild(element); // Required for this to work in FireFox
+	element.click();
+
+}
+
+const callDienst = async (data) => {
+	try {
+		console.log(JSON.stringify(convertToDienst(data)[0]))
+		const req = await axios.post(`http://localhost:8000/ldb/api/v3/people/`, convertToDienst(data)[0], {headers: {
+				'Content-Type': 'application/json',
+				"Authorization": "Token 71ee66e2648a49ade0c8db7a5b4837f05a048328"
+			}});
+		return req.data
+	} catch (e) {
+		console.error(e)
 	}
-	return list
+
 }
 
 const IndeterminateCheckbox = React.forwardRef(
-		// @ts-ignore
-	({ indeterminate, ...rest }, ref) => {
+	// @ts-ignore
+	({indeterminate, ...rest}, ref) => {
 		const defaultRef = React.useRef()
 		const resolvedRef = ref || defaultRef
 
@@ -70,17 +135,14 @@ const IndeterminateCheckbox = React.forwardRef(
 )
 
 // @ts-ignore
-function Table({ columns, data }) {
+function Table({columns, data}) {
 	// Use the state and functions returned from useTable to build your UI
 	const {
 		getTableProps,
 		getTableBodyProps,
 		headerGroups,
 		prepareRow,
-		page, // Instead of using 'rows', we'll use page,
-		// which has only the rows for the active page
-
-		// The rest of these things are super handy, too ;)
+		page,
 		canPreviousPage,
 		canNextPage,
 		pageOptions,
@@ -90,8 +152,8 @@ function Table({ columns, data }) {
 		previousPage,
 		setPageSize,
 		selectedFlatRows,
-		state: { pageIndex, pageSize, selectedRowIds },
-	} = useTable( {
+		state: {pageIndex, pageSize, selectedRowIds},
+	} = useTable({
 			columns,
 			data,
 		},
@@ -104,14 +166,14 @@ function Table({ columns, data }) {
 					id: 'selection',
 					// The header can use the table's getToggleAllRowsSelectedProps method
 					// to render a checkbox
-					Header: ({ getToggleAllPageRowsSelectedProps }) => (
+					Header: ({getToggleAllPageRowsSelectedProps}) => (
 						<div>
 							<IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
 						</div>
 					),
 					// The cell can use the individual row's getToggleRowSelectedProps method
 					// to the render a checkbox
-					Cell: ({ row }) => (
+					Cell: ({row}) => (
 						<div>
 							<IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
 						</div>
@@ -124,121 +186,136 @@ function Table({ columns, data }) {
 	// Render the UI for your table
 	return (
 		<>
-		<table {...getTableProps()}>
-			<thead>
-			{headerGroups.map(headerGroup => (
-				<tr {...headerGroup.getHeaderGroupProps()}>
-					{headerGroup.headers.map(column => (
-						<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+			<div className="tableWrap">
+				<table {...getTableProps()}>
+					<thead>
+					{headerGroups.map(headerGroup => (
+						<tr {...headerGroup.getHeaderGroupProps()}>
+							{headerGroup.headers.map(column => (
+								<th {...column.getHeaderProps()}>{column.render('Header')}</th>
+							))}
+						</tr>
 					))}
-				</tr>
-			))}
-			</thead>
-			<tbody {...getTableBodyProps()}>
-			{page.map((row, i) => {
-				prepareRow(row)
-				return (
-					<tr {...row.getRowProps()}>
-						{row.cells.map(cell => {
-							return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
-						})}
-					</tr>
-				)
-			})}
-			</tbody>
-		</table>
-	<div className="pagination">
-		<ButtonToolbar>
-			<Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-				{'<<'}
-			</Button>
-			<Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-				{'<'}
-			</Button>
-			<Button onClick={() => nextPage()} disabled={!canNextPage}>
-				{'>'}
-			</Button>
-			<Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-				{'>>'}
-			</Button>
-		<span>
+					</thead>
+					<tbody {...getTableBodyProps()}>
+					{page.map((row, i) => {
+						prepareRow(row)
+						return (
+							<tr {...row.getRowProps()}>
+								{row.cells.map(cell => {
+									return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+								})}
+							</tr>
+						)
+					})}
+					</tbody>
+				</table>
+			</div>
+			<div className="pagination">
+				<ButtonToolbar>
+					<Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+						{'<<'}
+					</Button>
+					<Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+						{'<'}
+					</Button>
+					<Button onClick={() => nextPage()} disabled={!canNextPage}>
+						{'>'}
+					</Button>
+					<Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+						{'>>'}
+					</Button>
+					<span>
           Page{' '}
-			<strong>
+						<strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
         </span>
-		<span>
+					<span>
           | Go to page:{' '}
-			<input
-				type="number"
-				defaultValue={pageIndex + 1}
-				onChange={e => {
-					const page = e.target.value ? Number(e.target.value) - 1 : 0
-					gotoPage(page)
-				}}
-				style={{ width: '100px' }}
-			/>
+						<input
+							type="number"
+							defaultValue={pageIndex + 1}
+							onChange={e => {
+								const page = e.target.value ? Number(e.target.value) - 1 : 0
+								gotoPage(page)
+							}}
+							style={{width: '100px'}}
+						/>
         </span>
-		<select
-			value={pageSize}
-			onChange={e => {
-				setPageSize(Number(e.target.value))
-			}}
-		>
-			{[10, 20, 30, 40, 50, 100, 1000].map(pageSize => (
-				<option key={pageSize} value={pageSize}>
-					Show {pageSize}
-				</option>
-			))}
-		</select>
-		</ButtonToolbar>
-		{/*<pre>*/}
-        {/*  <code>*/}
-        {/*    {JSON.stringify(*/}
-		{/*		{*/}
-		{/*			selectedRowIds: selectedRowIds,*/}
-		{/*			'selectedFlatRows[].original': selectedFlatRows.map(*/}
-		{/*				d => d.original*/}
-		{/*			),*/}
-		{/*		},*/}
-		{/*		null,*/}
-		{/*		2*/}
-		{/*	)}*/}
-        {/*  </code>*/}
-        {/*</pre>*/}
-	</div>
-	</>
+					<select
+						value={pageSize}
+						onChange={e => {
+							setPageSize(Number(e.target.value))
+						}}
+					>
+						{[10, 20, 30, 40, 50, 100, 1000].map(pageSize => (
+							<option key={pageSize} value={pageSize}>
+								Show {pageSize}
+							</option>
+						))}
+					</select>
+					<Button onClick={() => exportCSV(selectedFlatRows.map(
+						d => d.original
+					))}>Export selection to CSV</Button>
+					<Button onClick={() => {callDienst(selectedFlatRows.map(
+						d => d.original
+					))}}> verneuk dienst</Button>
+
+				</ButtonToolbar>
+				<pre>
+				  <code>
+				    {JSON.stringify(
+						{
+							selectedRowIds: selectedRowIds,
+							'selectedFlatRows[].original': selectedFlatRows.map(
+								d => d.original
+							),
+						},
+						null,
+						2
+					)}
+				  </code>
+				</pre>
+			</div>
+		</>
 	)
 }
 
 function App() {
 
-	const [data, setData] = useState([{name: ""}]);
+	const [data, setData] = useState( [{name: ""}]);
+	const [unhandled, setUnhandled] = useState(false)
+	const values = ["initials", "firstname", "preposition", "surname", "gender", "birthdate", "streetName", "houseNumber", "postCode", "city", "country", "email", "emailConfirmed", "phoneMobile", "study", "studentNumber", "netid", "id", "emergencyName", "emergencyPhone", "mailActivity", "mailCareer", "mailEducation", "machazine", "addedToLdb", "paidStatus", "paidDate"]
+	const shownValues = ["firstname", "preposition", "surname", "streetName", "houseNumber", "postCode", "city", "country", "email", "netid", "studentNumber"]
 	const columns = React.useMemo(
-		() => [
-			{
-				Header: 'Name',
-				columns: [
-					{
-						Header: 'First Name',
-						accessor: 'name',
-					},
-				],
-			},
-		],
+		() => shownValues.map(x => {
+			return {
+				Header: x,
+				accessor: x,
+			}
+		}),
 		[]
 	)
 
 	// @ts-ignore
-	React.useEffect(async () => {
-		const requestedData = await requestData();
-		setData(requestedData ? requestedData : [])
-	}, [])
+	React.useEffect(() => {
+		const func = async () => {
+			const requestedData = await requestData(unhandled);
+			setData(requestedData ? requestedData : [])
+		}
+		func()
+	}, [unhandled])
 
 	return (
-		<Styles>
-			<Table columns={columns} data={data} />
-		</Styles>
+		<Box>
+			<ButtonGroup>
+				<Button onClick={() => setUnhandled(!unhandled)}>{unhandled ? "All" : "Unhandled"}</Button>
+			</ButtonGroup>
+			<Styles>
+				<Table columns={columns} data={data}/>
+			</Styles>
+		</Box>
 	)
 }
 
