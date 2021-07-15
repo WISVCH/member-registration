@@ -12,4 +12,5 @@ interface MemberRepository : JpaRepository<Member, Long>{
 	fun findAllByAddedToLdb(addedToLdb: Boolean): List<Member>
 
 	fun findByEmail(email: String): Member
+
 }
