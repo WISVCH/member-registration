@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 @Service
 class MemberServiceImpl(val memberRepository: MemberRepository) : MemberService {
 
-	private fun verifyDients(member : Member) : Boolean {
+	private fun verifyDienst(member : Member) : Boolean {
 		return true;
 	}
 
@@ -16,10 +16,14 @@ class MemberServiceImpl(val memberRepository: MemberRepository) : MemberService 
 	}
 
 	override fun addMember(member: Member) {
-		if (verifyDients(member)) {
+		if (verifyDienst(member)) {
 			memberRepository.save(member);
 		} else {
 			throw AlreadyInDienstException(member);
 		}
+	}
+
+	override fun getMemberByEmail(email: String): Member {
+		return memberRepository.findMemberByEmail(email)
 	}
 }
