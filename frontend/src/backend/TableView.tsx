@@ -97,6 +97,16 @@ const exportCSV = (data) => {
 	element.download = "ledenExport.csv";
 	document.body.appendChild(element); // Required for this to work in FireFox
 	element.click();
+}
+
+const addToDienst = (data) => { // TODO proper error handling
+	data.forEach( netid => {
+		try {
+			await axios.get(`${ServerDomain}/api/admin/members/${netid}`);
+		} catch (e) {
+			console.error(e)
+		}
+	})
 
 }
 
@@ -243,22 +253,11 @@ function Table({columns, data}) {
 					<Button onClick={() => exportCSV(selectedFlatRows.map(
 						d => d.original
 					))}>Export selection to CSV</Button>
-					
+					<Button onClick={() => addToDienst(selectedFlatRows.map(
+						d => d.original.netid
+					))}>Add selection to LDB</Button>
+
 				</ButtonToolbar>
-				<pre>
-				  <code>
-				    {JSON.stringify(
-						{
-							selectedRowIds: selectedRowIds,
-							'selectedFlatRows[].original': selectedFlatRows.map(
-								d => d.original
-							),
-						},
-						null,
-						2
-					)}
-				  </code>
-				</pre>
 			</div>
 		</>
 	)
