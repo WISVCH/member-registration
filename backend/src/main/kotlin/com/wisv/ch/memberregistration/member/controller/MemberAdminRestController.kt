@@ -100,8 +100,8 @@ class MemberAdminRestController(val memberService: MemberService, val paymentRep
 		val requestBody: okhttp3.RequestBody = mainBody.toRequestBody(JSON)
 
 		val request: Request = Request.Builder()
-			.url("http://localhost:8000/ldb/api/v3/people/")
-			.addHeader("Authorization", "Token 71ee66e2648a49ade0c8db7a5b4837f05a048328")
+			.url("http://localhost:8000/ldb/api/v3/people/") // TODO add the dienst url to env
+			.addHeader("Authorization", "Token 71ee66e2648a49ade0c8db7a5b4837f05a048328") //TODO add token in env
 			.addHeader("Content-Type", "application/json")
 			.post(requestBody)
 			.build()
@@ -111,8 +111,7 @@ class MemberAdminRestController(val memberService: MemberService, val paymentRep
 		return if (response.code == 201) {
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.OK, "User successfully added to dienst ldb.");
 		} else {
-			System.out.println(formatter.format(member.birthdate))
-			ResponseEntityBuilder.createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response.body?.string() ?: ""  + formatter.format(member.birthdate));
+			ResponseEntityBuilder.createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response.body?.string() ?: "");
 		}
 	}
 }
