@@ -103,7 +103,8 @@ function Table({columns, data, exportCsv, addToDienst}) {
 			</div>
 			<div className="pagination">
 				<ButtonToolbar>
-					<Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+					<ButtonGroup>
+				<Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
 						{'<<'}
 					</Button>
 					<Button onClick={() => previousPage()} disabled={!canPreviousPage}>
@@ -115,13 +116,12 @@ function Table({columns, data, exportCsv, addToDienst}) {
 					<Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
 						{'>>'}
 					</Button>
+					</ButtonGroup>
 					<span>
           Page{' '}
 						<strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
-        </span>
-					<span>
           | Go to page:{' '}
 						<input
 							type="number"
@@ -132,8 +132,8 @@ function Table({columns, data, exportCsv, addToDienst}) {
 							}}
 							style={{width: '100px'}}
 						/>
-        </span>
-					<select
+						</span>
+					<StyledSelect
 						value={pageSize}
 						onChange={e => {
 							setPageSize(Number(e.target.value))
@@ -144,52 +144,49 @@ function Table({columns, data, exportCsv, addToDienst}) {
 								Show {pageSize}
 							</option>
 						))}
-					</select>
-					<Button onClick={() => exportCSV(selectedFlatRows.map(
+					</StyledSelect>
+					<ButtonGroup>
+				<Button onClick={() => exportCSV(selectedFlatRows.map(
 						d => d.original
 					))}>Export selection to CSV</Button>
 					<Button onClick={() => setShowAlert(true)}>Add selection to LDB</Button>
+					</ButtonGroup>
 				</ButtonToolbar>
-				{showAlert ? (<Alert bsStyle="danger" onDismiss={() => setShowAlert(false)}>
-					<h4>Check your selection!</h4>
-					<p>
-						You are about to add the selected members to the leden database are you sure you want to
-						continue?
-						Please double check your selection it takes manual work to reverse this action!
-					</p>
-					<p>
-						<ButtonToolbar>
-							<ButtonGroup>
-								<CustomWarning className="btn-danger" onClick={() => {
-									setShowAlert(false)
-									addToDienst(selectedFlatRows.map(
-										d => d.original.netid
-									))
-								}}>I read this message and double checked my selection</CustomWarning>
-							</ButtonGroup>
-							<ButtonGroup>
-								<span> or </span>
-							</ButtonGroup>
-							<ButtonGroup>
-								<StyledButton onClick={() => setShowAlert(false)}>Cancel</StyledButton>
-							</ButtonGroup>
-						</ButtonToolbar>
-					</p>
-				</Alert>) : ""}
 			</div>
+			{showAlert ? (<Alert bsStyle="danger" onDismiss={() => setShowAlert(false)}>
+				<h4>Check your selection!</h4>
+				<p>
+					You are about to add the selected members to the leden database are you sure you want to
+					continue?
+					Please double check your selection it takes manual work to reverse this action!
+				</p>
+				<p>
+					<ButtonToolbar>
+						<ButtonGroup>
+							<Button className="btn-danger" onClick={() => {
+								setShowAlert(false)
+								addToDienst(selectedFlatRows.map(
+									d => d.original.netid
+								))
+							}}>I read this message and double checked my selection</Button>
+						</ButtonGroup>
+						<ButtonGroup>
+							<span> or </span>
+						</ButtonGroup>
+						<ButtonGroup>
+							<Button onClick={() => setShowAlert(false)}>Cancel</Button>
+						</ButtonGroup>
+					</ButtonToolbar>
+				</p>
+			</Alert>) : ""}
 		</>
 	)
 }
 
-const StyledButton = styled(Button)`
-	border-radius: 10px;
-`
-
-const CustomWarning = styled(StyledButton)`
- &:hover {
- 	background-color: #d43f3a !important;
- }
- 
+const StyledSelect = styled("select")`
+max-width: 30%;
+width: auto;
+display: inline-block;
 `
 
 export default Table;

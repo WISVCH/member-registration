@@ -76,7 +76,7 @@ function TableView() {
 	return (
 		<Box>
 			<ButtonGroup>
-				<Button onClick={() => setUnhandled(!unhandled)}>{unhandled ? "All" : "Unhandled"}</Button>
+				<Button onClick={() => setUnhandled(!unhandled)}>{unhandled ? "Show All" : "Show unhandled entries"}</Button>
 			</ButtonGroup>
 			{`currently showing all ${unhandled ? "unhandled" : ""} entries`}
 			<Styles>
@@ -144,9 +144,6 @@ const Styles = styled.div`
     }
   }
 
-  .pagination {
-    padding: 0.5rem;
-  }
 `
 
 const Box = styled.div`
