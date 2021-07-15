@@ -8,7 +8,7 @@ import java.util.*
 
 class DienstFormatter {
 	companion object {
-		fun getPriceByProductKey(key: String): Int {
+		private fun getPriceByProductKey(key: String): Int {
 			return when (key) {
 				"0bba7e47-db2e-4dd8-9eac-8cceeb9a1ebf" -> 25
 				"7b495ae1-c413-405f-b7ee-7758b8cdfb99" -> 20

@@ -8,7 +8,7 @@ import {createGlobalStyle} from "styled-components";
 
 const GlobalStyle = createGlobalStyle`
   body {
-		background: linear-gradient(rgba(0, 0, 0, 0.527),rgba(0, 0, 0, 0.5)) , url(${backgroundImage}) no-repeat center center;
+		background: linear-gradient(rgba(0, 0, 0, 0.55),rgba(0, 0, 0, 0.65)) , url(${backgroundImage}) no-repeat center center;
     	background-size: cover;
     	background-attachment: fixed;
     	height: 100%;
