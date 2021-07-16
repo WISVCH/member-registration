@@ -3,6 +3,18 @@ import React, {useState} from "react";
 import {usePagination, useRowSelect, useTable} from "react-table";
 import {Alert, Button, ButtonGroup, ButtonToolbar} from "react-bootstrap";
 import styled from "styled-components";
+import convertToDienst from "./convertToDienstFormat";
+import {convertArrayToCSV} from "convert-array-to-csv";
+
+const exportCSV = (data) => {
+	const csvString = convertArrayToCSV(convertToDienst(data))
+	const element = document.createElement("a");
+	const file = new Blob([csvString], {type: 'text/plain'});
+	element.href = URL.createObjectURL(file);
+	element.download = "ledenExport.csv";
+	document.body.appendChild(element); // Required for this to work in FireFox
+	element.click();
+}
 
 const IndeterminateCheckbox = React.forwardRef(
 	// @ts-ignore
@@ -24,7 +36,7 @@ const IndeterminateCheckbox = React.forwardRef(
 )
 
 // @ts-ignore
-function Table({columns, data, exportCsv, addToDienst, setMember}) {
+function Table({columns, data, addToDienst, setMember}) {
 	// Use the state and functions returned from useTable to build your UI
 	const {
 		getTableProps,

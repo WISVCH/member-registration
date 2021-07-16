@@ -1,23 +1,10 @@
 import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import axios from "axios";
-import {convertArrayToCSV} from 'convert-array-to-csv';
 import {Button, ButtonGroup, Panel} from "react-bootstrap";
-import convertToDienst from "./convertToDienstFormat";
 import Table from "./Table";
 import MemberEdit from "./MemberEdit";
 import PanelBody from "react-bootstrap/lib/PanelBody";
-
-const exportCSV = (data) => {
-	const csvString = convertArrayToCSV(convertToDienst(data))
-	const element = document.createElement("a");
-	const file = new Blob([csvString], {type: 'text/plain'});
-	element.href = URL.createObjectURL(file);
-	element.download = "ledenExport.csv";
-	document.body.appendChild(element); // Required for this to work in FireFox
-	element.click();
-}
-
 
 function TableView() {
 	const [data, setData] = useState([{}]);
@@ -26,7 +13,7 @@ function TableView() {
 	const [focussedMember, setFocussedMember] = useState(undefined)
 	const [message, setMessage] = useState({style: "", context: "", message: ""})
 
-	const changeMessage = (style: string, context: string, message:string) => {
+	const changeMessage = (style: string, context: string, message: string) => {
 		setMessage({style, context, message})
 		setTimeout(() => {
 			setMessage({style: "", context: "", message: ""})
@@ -53,7 +40,7 @@ function TableView() {
 					// eslint-disable-next-line no-loop-func
 				}).catch(error => {
 					report = `${report}${netid}: "${error.response?.data.message}" error occurred! \n`
-			})
+				})
 		}
 		setReport(report)
 	}
@@ -61,11 +48,11 @@ function TableView() {
 	const updateMember = async (member) => {
 		await axios.put(`/api/admin/members/put/${member.netid}`, member)
 			.then(response => {
-				changeMessage("success" ,`Editing ${member.netid}'s user information`, response?.data.message)
+				changeMessage("success", `Editing ${member.netid}'s user information`, response?.data.message)
 
-		})
+			})
 			.catch(error => {
-				changeMessage("danger",`Editing ${member.netid}'s user information`, error.response?.data.message)
+				changeMessage("danger", `Editing ${member.netid}'s user information`, error.response?.data.message)
 			})
 	}
 
@@ -94,11 +81,13 @@ function TableView() {
 	return (
 		<Box>
 			<ButtonGroup>
-				<Button onClick={() => setUnhandled(!unhandled)}>{unhandled ? "Show All" : "Show unhandled entries"}</Button>
+				<Button
+					onClick={() => setUnhandled(!unhandled)}>{unhandled ? "Show All" : "Show unhandled entries"}</Button>
 			</ButtonGroup>
 			{`currently showing all ${unhandled ? "unhandled" : ""} entries`}
 			<Styles>
-				<Table columns={columns} data={data} exportCsv={exportCSV} addToDienst={addToDienst(setReport)} setMember={setFocussedMember}/>
+				<Table columns={columns} data={data} addToDienst={addToDienst(setReport)}
+					   setMember={setFocussedMember}/>
 			</Styles>
 			{focussedMember ? (
 				<MemberEdit member={focussedMember} setMember={setFocussedMember} updateMember={updateMember}/>
@@ -108,9 +97,11 @@ function TableView() {
 					<Panel.Body>{message.message}</Panel.Body>
 				</Panel>
 			) : ""}
-			{report ? (<Panel>
-				<PanelLineBreak>{report}</PanelLineBreak>
-			</Panel>) : ""}
+			{report ? (
+				<Panel>
+					<PanelLineBreak>{report}</PanelLineBreak>
+				</Panel>
+			) : ""}
 		</Box>
 	)
 }
