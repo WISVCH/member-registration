@@ -76,7 +76,7 @@ function TableView() {
 			setData(requestedData ? requestedData : [])
 		}
 		func()
-	}, [unhandled, message])
+	}, [unhandled, message, report])
 
 	return (
 		<Box>
