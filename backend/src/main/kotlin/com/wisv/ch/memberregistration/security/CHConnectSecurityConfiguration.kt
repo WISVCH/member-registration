@@ -44,8 +44,6 @@ class CHConnectSecurityConfiguration : WebSecurityConfigurerAdapter() {
 			?.antMatchers("/admin/**")?.hasRole("ADMIN")
 			?.anyRequest()?.permitAll()
 			?.and()
-			?.exceptionHandling()?.authenticationEntryPoint(HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
-			?.and()
 			?.oauth2Login()?.userInfoEndpoint()?.oidcUserService(oidcUserService())
 	}
 

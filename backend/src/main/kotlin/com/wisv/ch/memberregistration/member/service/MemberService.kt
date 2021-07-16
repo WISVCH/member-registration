@@ -12,4 +12,5 @@ interface MemberService {
 	fun getMemberByNetId(netid: String): Member
 
 	fun getAllMembers(): List<Member>
+
 }

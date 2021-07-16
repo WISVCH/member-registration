@@ -1,10 +1,11 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import styled from 'styled-components'
 import axios from "axios";
 import {convertArrayToCSV} from 'convert-array-to-csv';
 import {Button, ButtonGroup, Panel} from "react-bootstrap";
 import convertToDienst from "./convertToDienstFormat";
 import Table from "./Table";
+import MemberEdit from "./MemberEdit";
 import PanelBody from "react-bootstrap/lib/PanelBody";
 
 const exportCSV = (data) => {
@@ -22,15 +23,22 @@ function TableView() {
 	const [data, setData] = useState([{}]);
 	const [unhandled, setUnhandled] = useState(false)
 	const [report, setReport] = useState("")
+	const [focussedMember, setFocussedMember] = useState(undefined)
+	const [message, setMessage] = useState({style: "", context: "", message: ""})
+
+	const changeMessage = (style: string, context: string, message:string) => {
+		setMessage({style, context, message})
+		setTimeout(() => {
+			setMessage({style: "", context: "", message: ""})
+		}, 10000);
+	}
 
 	const requestData = async (unhandled) => {
 		let req;
 		try {
 			req = await axios.get(`/api/admin/members/${unhandled ? "unhandled" : "all"}`);
 		} catch (reason) {
-			if (reason.response!.status === 401) {
-				window.location.href = `http://connect.ch.tudelft.nl/login?redirect_uri=${window.location.href}`
-			}
+			window.location.href = `http://connect.ch.tudelft.nl/login?redirect_uri=${window.location.href}`
 		}
 		return req?.data
 	}
@@ -44,11 +52,21 @@ function TableView() {
 					report = `${report}${netid}: "${response?.data.message}" successfull! \n`
 					// eslint-disable-next-line no-loop-func
 				}).catch(error => {
-					console.log(error.response)
 					report = `${report}${netid}: "${error.response?.data.message}" error occurred! \n`
 			})
 		}
 		setReport(report)
+	}
+
+	const updateMember = async (member) => {
+		await axios.put(`/api/admin/members/put/${member.netid}`, member)
+			.then(response => {
+				changeMessage("success" ,`Editing ${member.netid}'s user information`, response?.data.message)
+
+		})
+			.catch(error => {
+				changeMessage("danger",`Editing ${member.netid}'s user information`, error.response?.data.message)
+			})
 	}
 
 	const columns = React.useMemo(
@@ -65,13 +83,13 @@ function TableView() {
 	)
 
 	// @ts-ignore
-	React.useEffect(() => {
+	useEffect(() => {
 		const func = async () => {
 			const requestedData = await requestData(unhandled);
 			setData(requestedData ? requestedData : [])
 		}
 		func()
-	}, [unhandled])
+	}, [unhandled, message])
 
 	return (
 		<Box>
@@ -80,8 +98,16 @@ function TableView() {
 			</ButtonGroup>
 			{`currently showing all ${unhandled ? "unhandled" : ""} entries`}
 			<Styles>
-				<Table columns={columns} data={data} exportCsv={exportCSV} addToDienst={addToDienst(setReport)}/>
+				<Table columns={columns} data={data} exportCsv={exportCSV} addToDienst={addToDienst(setReport)} setMember={setFocussedMember}/>
 			</Styles>
+			{focussedMember ? (
+				<MemberEdit member={focussedMember} setMember={setFocussedMember} updateMember={updateMember}/>
+			) : ""}
+			{message.style ? (
+				<Panel bsStyle={message.style}>
+					<Panel.Body>{message.message}</Panel.Body>
+				</Panel>
+			) : ""}
 			{report ? (<Panel>
 				<PanelLineBreak>{report}</PanelLineBreak>
 			</Panel>) : ""}

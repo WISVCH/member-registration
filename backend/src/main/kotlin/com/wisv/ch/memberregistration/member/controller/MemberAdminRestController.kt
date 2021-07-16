@@ -15,6 +15,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
 @EnableConfigurationProperties
@@ -42,7 +43,7 @@ class MemberAdminRestController(val memberService: MemberService, val memberRepo
 
 
 	@GetMapping("/dienst/{netid}")
-	fun webHookEntryPoint(@PathVariable netid: String): ResponseEntity<*> {
+	fun addMemberToDienst(@PathVariable netid: String): ResponseEntity<*> {
 		val member = memberService.getMemberByNetId(netid)
 		val payment: Payment = paymentRepository.getByMember(member)
 
@@ -64,6 +65,16 @@ class MemberAdminRestController(val memberService: MemberService, val memberRepo
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.OK, "User successfully added to dienst ldb.");
 		} else {
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response.body?.string() ?: "");
+		}
+	}
+
+	@PutMapping("/put/{netid}")
+	fun editExistingMember(@PathVariable netid: String, @RequestBody member: Member): ResponseEntity<*> {
+		return if (netid == member.netid) {
+			memberRepository.saveAndFlush(member)
+			ResponseEntityBuilder.createResponseEntity(HttpStatus.OK, "User successfully edited!")
+		} else {
+			ResponseEntityBuilder.createResponseEntity(HttpStatus.BAD_REQUEST, "Tried to edit a different user than the given netid.")
 		}
 	}
 }

@@ -24,7 +24,7 @@ const IndeterminateCheckbox = React.forwardRef(
 )
 
 // @ts-ignore
-function Table({columns, data, exportCsv, addToDienst}) {
+function Table({columns, data, exportCsv, addToDienst, setMember}) {
 	// Use the state and functions returned from useTable to build your UI
 	const {
 		getTableProps,
@@ -101,28 +101,29 @@ function Table({columns, data, exportCsv, addToDienst}) {
 					</tbody>
 				</table>
 			</div>
-			<div className="pagination">
-				<ButtonToolbar>
+			<Toolbar>
+				<InlineBlock>
 					<ButtonGroup>
-				<Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
-						{'<<'}
-					</Button>
-					<Button onClick={() => previousPage()} disabled={!canPreviousPage}>
-						{'<'}
-					</Button>
-					<Button onClick={() => nextPage()} disabled={!canNextPage}>
-						{'>'}
-					</Button>
-					<Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
-						{'>>'}
-					</Button>
+						<Button onClick={() => gotoPage(0)} disabled={!canPreviousPage}>
+							{'<<'}
+						</Button>
+						<Button onClick={() => previousPage()} disabled={!canPreviousPage}>
+							{'<'}
+						</Button>
+						<Button onClick={() => nextPage()} disabled={!canNextPage}>
+							{'>'}
+						</Button>
+						<Button onClick={() => gotoPage(pageCount - 1)} disabled={!canNextPage}>
+							{'>>'}
+						</Button>
 					</ButtonGroup>
-					<span>
+					</InlineBlock>
+					<InlineBlock>
           Page{' '}
 						<strong>
             {pageIndex + 1} of {pageOptions.length}
           </strong>{' '}
-          | Go to page:{' '}
+						| Go to page:{' '}
 						<input
 							type="number"
 							defaultValue={pageIndex + 1}
@@ -132,7 +133,7 @@ function Table({columns, data, exportCsv, addToDienst}) {
 							}}
 							style={{width: '100px'}}
 						/>
-						</span>
+						</InlineBlock>
 					<StyledSelect
 						value={pageSize}
 						onChange={e => {
@@ -146,13 +147,17 @@ function Table({columns, data, exportCsv, addToDienst}) {
 						))}
 					</StyledSelect>
 					<ButtonGroup>
-				<Button onClick={() => exportCSV(selectedFlatRows.map(
-						d => d.original
-					))}>Export selection to CSV</Button>
-					<Button onClick={() => setShowAlert(true)}>Add selection to LDB</Button>
+						<Button onClick={() => exportCSV(selectedFlatRows.map(
+							d => d.original
+						))}>Export selection to CSV</Button>
+						<Button onClick={() => setShowAlert(true)}>Add selection to LDB</Button>
+						<Button onClick={() => {
+							if (selectedFlatRows.length === 1) {
+								setMember(selectedFlatRows[0].original)
+							}
+						}}>Edit selected member</Button>
 					</ButtonGroup>
-				</ButtonToolbar>
-			</div>
+			</Toolbar>
 			{showAlert ? (<Alert bsStyle="danger" onDismiss={() => setShowAlert(false)}>
 				<h4>Check your selection!</h4>
 				<p>
@@ -183,10 +188,21 @@ function Table({columns, data, exportCsv, addToDienst}) {
 	)
 }
 
-const StyledSelect = styled("select")`
-max-width: 30%;
-width: auto;
+const Toolbar = styled.div`
+  width:100%;
+  padding-top: 1rem;
+`
+
+const InlineBlock = styled.div`
 display: inline-block;
+width: 33%;
+`
+
+const StyledSelect = styled("select")`
+display: inline-flex;
+max-width: 33%;
+width: 33%;
+float: right;
 `
 
 export default Table;

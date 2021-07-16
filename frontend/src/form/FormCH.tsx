@@ -4,6 +4,7 @@ import {Redirect} from "react-router-dom";
 import {getNames, getCodes} from "country-list";
 import axios from "axios";
 import styled from "styled-components";
+import {zip} from "../util/util";
 
 interface FormTypes {
 	[index: string]: string | boolean,
@@ -177,7 +178,6 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 
 
 	render() {
-		const zip = (a: any[], b: { [x: string]: any; }) => a.map((k, i) => [k, b[i]]);
 		const buttonStyle = this.state.sendStatus === undefined ? "" : (this.state.sendStatus ? "btn-success" : "btn-danger");
 		return (
 			!this.state.redirect ?
