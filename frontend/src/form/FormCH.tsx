@@ -103,9 +103,6 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 			if (value === "netid" && !validateNetId(this.state.formValues[value])) {
 				return "error"
 			}
-			if (value === "studentNumber" && !/[0-9]{7}/.test(this.state.formValues[value])){
-				return "error"
-			}
 		}
 		return null;
 	}

@@ -8,6 +8,7 @@ spring:
     mail:
         host: localhost
         port: 1025
+
     data.jpa.repositories.enabled: true
     datasource:
         driver-class-name: org.postgresql.Driver
