@@ -7,15 +7,20 @@ import org.springframework.mail.MailSendException
 import org.springframework.mail.javamail.JavaMailSender
 import org.springframework.mail.javamail.MimeMessageHelper
 import org.springframework.stereotype.Service
+import org.thymeleaf.context.Context
 import org.thymeleaf.spring5.SpringTemplateEngine
+import java.util.*
 import javax.mail.MessagingException
 
 @Service
 class MailServiceImpl(val mailSender: JavaMailSender, val templateEngine: SpringTemplateEngine) : MailService {
 
 	override fun sendFormConfirmation(member: Member) {
-		val subject = "Thank you ${member.firstname} for registering at CH!"
-		this.sendMailWithContent(member.email, subject, "<div>Thank you for registering ${member.firstname}</div>")
+		val ctx = Context(Locale("en"))
+		ctx.setVariable("name", member.firstname)
+		ctx.setVariable("message", "Thank you for registering ${member.firstname}")
+		val subject = "Thank you for registering at CH!"
+		this.sendMailWithContent(member.email, subject, templateEngine.process("mailTemplate", ctx))
 	}
 
 	/**

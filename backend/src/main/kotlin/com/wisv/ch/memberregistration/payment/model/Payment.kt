@@ -1,7 +1,6 @@
-package com.wisv.ch.memberregistration.paidstatus.model
+package com.wisv.ch.memberregistration.payment.model
 
 import com.wisv.ch.memberregistration.member.model.Member
-import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
 import javax.persistence.*

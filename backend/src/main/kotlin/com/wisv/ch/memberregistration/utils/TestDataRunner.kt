@@ -2,9 +2,9 @@ package com.wisv.ch.memberregistration.utils
 
 import com.wisv.ch.memberregistration.member.model.Member
 import com.wisv.ch.memberregistration.member.service.MemberRepository
-import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
-import com.wisv.ch.memberregistration.paidstatus.model.Payment
-import com.wisv.ch.memberregistration.paidstatus.service.PaymentRepository
+import com.wisv.ch.memberregistration.payment.model.PaidStatus
+import com.wisv.ch.memberregistration.payment.model.Payment
+import com.wisv.ch.memberregistration.payment.service.PaymentRepository
 import com.wisv.ch.memberregistration.study.model.Study
 import org.springframework.boot.context.event.ApplicationStartedEvent
 import org.springframework.context.annotation.Profile

@@ -2,8 +2,7 @@ package com.wisv.ch.memberregistration.member.service;
 
 import com.wisv.ch.memberregistration.exception.AlreadyInDienstException;
 import com.wisv.ch.memberregistration.member.model.Member;
-import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
-import org.springframework.data.domain.PageRequest
+import com.wisv.ch.memberregistration.payment.model.PaidStatus
 import org.springframework.stereotype.Service;
 
 @Service

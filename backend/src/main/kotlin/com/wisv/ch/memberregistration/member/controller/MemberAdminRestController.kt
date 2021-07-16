@@ -3,8 +3,8 @@ package com.wisv.ch.memberregistration.member.controller
 import com.wisv.ch.memberregistration.member.model.Member
 import com.wisv.ch.memberregistration.member.service.MemberRepository
 import com.wisv.ch.memberregistration.member.service.MemberService
-import com.wisv.ch.memberregistration.paidstatus.model.Payment
-import com.wisv.ch.memberregistration.paidstatus.service.PaymentRepository
+import com.wisv.ch.memberregistration.payment.model.Payment
+import com.wisv.ch.memberregistration.payment.service.PaymentRepository
 import com.wisv.ch.memberregistration.utils.DienstFormatter
 import com.wisv.ch.memberregistration.utils.ResponseEntityBuilder
 import okhttp3.*

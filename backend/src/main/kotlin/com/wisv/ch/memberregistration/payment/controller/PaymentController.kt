@@ -1,11 +1,11 @@
-package com.wisv.ch.memberregistration.paidstatus.controller
+package com.wisv.ch.memberregistration.payment.controller
 
 import com.wisv.ch.memberregistration.member.service.MemberService
-import com.wisv.ch.memberregistration.paidstatus.model.OrderStatusDTO
-import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
-import com.wisv.ch.memberregistration.paidstatus.model.Payment
-import com.wisv.ch.memberregistration.paidstatus.model.PaymentDTO
-import com.wisv.ch.memberregistration.paidstatus.service.PaymentRepository
+import com.wisv.ch.memberregistration.payment.model.OrderStatusDTO
+import com.wisv.ch.memberregistration.payment.model.PaidStatus
+import com.wisv.ch.memberregistration.payment.model.Payment
+import com.wisv.ch.memberregistration.payment.model.PaymentDTO
+import com.wisv.ch.memberregistration.payment.service.PaymentRepository
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.RequestBody.Companion.toRequestBody

@@ -1,7 +1,7 @@
 package com.wisv.ch.memberregistration.utils
 
 import com.wisv.ch.memberregistration.member.model.Member
-import com.wisv.ch.memberregistration.paidstatus.model.Payment
+import com.wisv.ch.memberregistration.payment.model.Payment
 import org.springframework.boot.configurationprocessor.json.JSONObject
 import java.text.SimpleDateFormat
 import java.util.*

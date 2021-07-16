@@ -1,4 +1,4 @@
-package com.wisv.ch.memberregistration.paidstatus.model
+package com.wisv.ch.memberregistration.payment.model
 
 enum class PaidStatus {
 	CREATED, WAITING, PAID, EXPIRED, CANCELLED;

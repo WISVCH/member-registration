@@ -1,7 +1,7 @@
 package com.wisv.ch.memberregistration.member.service
 
 import com.wisv.ch.memberregistration.member.model.Member
-import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
+import com.wisv.ch.memberregistration.payment.model.PaidStatus
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

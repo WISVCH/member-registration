@@ -1,11 +1,10 @@
 package com.wisv.ch.memberregistration.member.model
 
-import com.wisv.ch.memberregistration.paidstatus.model.PaidStatus
+import com.wisv.ch.memberregistration.payment.model.PaidStatus
 import com.wisv.ch.memberregistration.study.model.Study
 import lombok.AllArgsConstructor
 import lombok.Data
 import lombok.NoArgsConstructor
-import org.jetbrains.annotations.NotNull
 import java.time.Instant
 import java.util.*
 import javax.persistence.*

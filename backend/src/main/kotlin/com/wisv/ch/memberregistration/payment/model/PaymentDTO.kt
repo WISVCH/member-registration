@@ -1,4 +1,4 @@
-package com.wisv.ch.memberregistration.paidstatus.model
+package com.wisv.ch.memberregistration.payment.model
 
 import lombok.AllArgsConstructor
 import lombok.Getter
