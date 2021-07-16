@@ -18,53 +18,30 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
-@EnableConfigurationProperties
 @RequestMapping("/admin/members")
 class MemberAdminRestController(val memberService: MemberService, val memberRepository: MemberRepository, val paymentRepository: PaymentRepository) {
-	val client = OkHttpClient()
-
-	@Value("\${dienst.url}")
-	lateinit var dienstUrl: String
-
-	@Value("\${dienst.token}")
-	lateinit var dienstToken: String
-
 
 	@GetMapping("/unhandled")
 	fun getAllNotInLdb(): List<Member> {
 		return this.memberService.getAllNotInLDB();
 	}
 
-
 	@GetMapping("/all")
 	fun getAllMembers(): List<Member> {
 		return this.memberService.getAllMembers();
 	}
 
-
 	@GetMapping("/dienst/{netid}")
 	fun addMemberToDienst(@PathVariable netid: String): ResponseEntity<*> {
 		val member = memberService.getMemberByNetId(netid)
-		val payment: Payment = paymentRepository.getByMember(member)
 
-		val mediaType: MediaType = "application/json; charset=utf-8".toMediaTypeOrNull()!!
-		val requestBody: okhttp3.RequestBody = DienstFormatter.toDienstFormat(member,payment).toRequestBody(mediaType)
-
-		val request: Request = Request.Builder()
-			.url("$dienstUrl/ldb/api/v3/people/")
-			.addHeader("Authorization", "Token $dienstToken")
-			.addHeader("Content-Type", "application/json")
-			.post(requestBody)
-			.build()
-
-		val call: Call = client.newCall(request)
-		val response: Response = call.execute()
+		val response = memberService.addMemberToDienst(member)
 		return if (response.code == 201) {
 			member.addedToLdb = true
 			memberRepository.saveAndFlush(member)
 			ResponseEntityBuilder.createResponseEntity(HttpStatus.OK, "User successfully added to dienst ldb.");
 		} else {
-			ResponseEntityBuilder.createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response.body?.string() ?: "");
+			ResponseEntityBuilder.createResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR, response.body?.string() ?: "Unable to retrieve error message");
 		}
 	}
 

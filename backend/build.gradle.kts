@@ -37,8 +37,7 @@ dependencies {
 
 	implementation("org.thymeleaf.extras:thymeleaf-extras-springsecurity5")
 	implementation("com.squareup.okhttp3:okhttp:4.9.1")
-
-
+	implementation("junit:junit:4.12")
 
 	compileOnly("org.projectlombok:lombok")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
@@ -51,6 +50,9 @@ dependencies {
 
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("org.springframework.security:spring-security-test")
+
+	testImplementation("org.junit.jupiter:junit-jupiter-api:5.3.1")
+	testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.3.1")
 }
 
 tasks.withType<KotlinCompile> {
