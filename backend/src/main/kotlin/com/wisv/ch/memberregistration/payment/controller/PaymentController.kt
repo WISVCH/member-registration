@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RequestBody
 
 
 @RestController
-@RequestMapping("/payment")
+@RequestMapping("/api/payment")
 class PaymentController(val memberService: MemberService, val paymentRepository: PaymentRepository) {
 	val client = OkHttpClient()
 

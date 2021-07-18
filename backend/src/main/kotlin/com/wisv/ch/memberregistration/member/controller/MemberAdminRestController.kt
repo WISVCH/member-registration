@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.bind.annotation.RequestBody
 
 @RestController
-@RequestMapping("/admin/members")
+@RequestMapping("/api/admin/members")
 class MemberAdminRestController(val memberService: MemberService, val memberRepository: MemberRepository, val paymentRepository: PaymentRepository) {
 
 	@GetMapping("/unhandled")

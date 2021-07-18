@@ -10,7 +10,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/members")
+@RequestMapping("/api/members")
 class MemberRestController(val memberService: MemberService, val mailService: MailService) {
 
 	@PostMapping
