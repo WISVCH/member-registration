@@ -58,12 +58,13 @@ dependencies {
 }
 
 val copyWebApp by tasks.registering(Copy::class) {
-	from("$rootDir/frontend/build")
-	into("$rootDir/backend/src/main/resources/static/")
+	from("$rootDir/Frontend/build/")
+	into("$rootDir/Backend/src/main/resources/static/")
 }
 
 tasks.withType<KotlinCompile> {
 	dependsOn(":Frontend:yarnBuild")
+	dependsOn(copyWebApp)
 	kotlinOptions {
 		freeCompilerArgs = listOf("-Xjsr305=strict")
 		jvmTarget = "11"

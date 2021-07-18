@@ -44,7 +44,7 @@ const Logo = styled.img`
 
 function App() {
 	return (
-		<Router basename={process.env.PUBLIC_URL}>
+		<Router basename={"/register"}>
 			<Switch>
 				<Route path="/admin/overview">
 					<AdminDashboard/>
