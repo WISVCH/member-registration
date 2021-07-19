@@ -77,4 +77,16 @@ tasks.withType<Test> {
 
 tasks.withType<org.springframework.boot.gradle.tasks.bundling.BootJar> {
 	dependsOn(copyWebApp)
+	val basename ="member-registration"
+	val version = if (project.hasProperty("buildNumber")) {
+		"${project.property("buildNumber")}"
+	} else {
+		"SNAPSHOT"
+	}
+	this.archiveFileName.set("${basename}.jar")
+
+	manifest {
+		attributes["Implementation-Title"] = "Member Registration"
+		attributes["Implementation-Version"] = version
+	}
 }
