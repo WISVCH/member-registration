@@ -4,6 +4,7 @@ import { useHistory } from "react-router-dom"
 import IdealLogo from './../resources/ideal.png';
 import SofortLogo from './../resources/sofort.png';
 import axios from "axios";
+import {contextPath} from "../App";
 
 const products = [
 	{title: "Membership 1st year student (€25,-)", key: "0bba7e47-db2e-4dd8-9eac-8cceeb9a1ebf"},
@@ -14,7 +15,7 @@ const products = [
 const getPaymentsInfo = async (name: string, email: string, products: string[], paymentprovider: string) => {
 	let answer : any;
 	try {
-		answer = await axios.post(`/api/payment`, {
+		answer = await axios.post(`${contextPath}/api/payment`, {
 			name: name,
 			email: email,
 			productKeys: products,

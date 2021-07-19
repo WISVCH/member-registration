@@ -5,6 +5,7 @@ import {Button, ButtonGroup, Panel} from "react-bootstrap";
 import Table from "./Table";
 import MemberEdit from "./MemberEdit";
 import PanelBody from "react-bootstrap/lib/PanelBody";
+import {contextPath} from "../App";
 
 function AdminDashboard() {
 	const [data, setData] = useState([{}]);
@@ -23,9 +24,9 @@ function AdminDashboard() {
 	const requestData = async (unhandled) => {
 		let req;
 		try {
-			req = await axios.get(`/api/admin/members/${unhandled ? "unhandled" : "all"}`);
+			req = await axios.get(`${contextPath}/api/admin/members/${unhandled ? "unhandled" : "all"}`);
 		} catch (reason) {
-			window.location.href = `/api/admin/members/login`
+			window.location.href = `${contextPath}/api/admin/members/login`
 		}
 		return req?.data
 	}
@@ -33,7 +34,7 @@ function AdminDashboard() {
 	const addToDienst = (setReport) => async (data) => {
 		let report = ""
 		for (const netid of data) {
-			await axios.get(`/api/admin/members/dienst/${netid}`)
+			await axios.get(`${contextPath}/api/admin/members/dienst/${netid}`)
 				// eslint-disable-next-line no-loop-func
 				.then(response => {
 					report = `${report}${netid}: "${response?.data.message}" successfull! \n`
@@ -46,7 +47,7 @@ function AdminDashboard() {
 	}
 
 	const updateMember = async (member) => {
-		await axios.put(`/api/admin/members/put/${member.netid}`, member)
+		await axios.put(`${contextPath}/api/admin/members/put/${member.netid}`, member)
 			.then(response => {
 				changeMessage("success", `Editing ${member.netid}'s user information`, response?.data.message)
 

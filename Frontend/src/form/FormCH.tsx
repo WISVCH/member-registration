@@ -5,6 +5,7 @@ import {getNames, getCodes} from "country-list";
 import axios from "axios";
 import styled from "styled-components";
 import {zip} from "../util/util";
+import {contextPath} from "../App";
 
 interface FormTypes {
 	[index: string]: string | boolean,
@@ -166,7 +167,7 @@ class FormCH extends React.Component<{}, { formValues: FormTypes, sendStatus?: b
 	async submit() {
 		let answer;
 		try {
-			answer = await axios.post(`/api/members`, this.state.formValues);
+			answer = await axios.post(`${contextPath}/api/members`, this.state.formValues);
 		} catch (e: any) {
 			this.setState({sendStatus: answer?.status === 200});
 			this.setState({redirect: answer?.status === 200});
