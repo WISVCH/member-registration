@@ -1,0 +1,28 @@
+## SPRING SETTINGS
+spring:
+    main:
+        allow-bean-definition-overriding: true
+    thymeleaf:
+        mode: HTML
+        encoding: UTF-8
+    data.jpa.repositories.enabled: true
+    jpa:
+        hibernate.ddl-auto: validate
+    security:
+        oauth2:
+            client:
+                provider:
+                    wisvchconnect:
+                        issuer-uri: https://connect.ch.tudelft.nl
+                registration:
+                    wisvchconnect:
+                        scope:
+                            - openid
+                            - profile
+                            - email
+                            - ldap
+
+server:
+    port: 9000
+    servlet:
+        context-path: /register
