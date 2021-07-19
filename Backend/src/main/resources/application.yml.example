@@ -64,8 +64,8 @@ wisvch.connect:
     admin-groups: hoothub
 
 dienst:
-    url: http://localhost:8000
-    token: 71ee66e2648a49ade0c8db7a5b4837f05a048328
+    url: {dienst_url}
+    token: {dienst_api_token}
 
 # CH Payments Configuration
 wisvch.payments:
