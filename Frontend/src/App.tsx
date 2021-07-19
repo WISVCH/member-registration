@@ -93,6 +93,6 @@ function Form() {
 	)
 }
 
-export const contextPath = process.env.CONTEXT_PATH ? process.env.CONTEXT_PATH : "/register"
+export const contextPath = process.env.SERVER_CONTEXT_PATH ? process.env.SERVER_CONTEXT_PATH : "/register"
 
 export default App;
