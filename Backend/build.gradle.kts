@@ -41,6 +41,8 @@ dependencies {
 	implementation("junit:junit:4.12")
 
 	compileOnly("org.projectlombok:lombok")
+	compileOnly("org.flywaydb:flyway-core:4.2.0")
+	
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 
 	runtimeOnly("com.h2database:h2")
