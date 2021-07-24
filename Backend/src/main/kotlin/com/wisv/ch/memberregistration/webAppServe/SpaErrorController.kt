@@ -19,8 +19,6 @@ import org.springframework.stereotype.Controller
 class SpaErrorController : ErrorController {
 	@RequestMapping("/error")
 	fun error(request: HttpServletRequest, response: HttpServletResponse): Any {
-		// place your additional code here (such as error logging...)
-		println("in the error controller")
 		return if (request.method.equals(HttpMethod.GET.name, ignoreCase = true) && !request.requestURI.contains("api")) {
 			response.status = HttpStatus.OK.value() // optional.
 			"forward:/" // forward to static SPA html resource.
