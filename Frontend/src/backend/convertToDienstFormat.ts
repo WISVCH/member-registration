@@ -10,7 +10,7 @@ const convertMemberToDienst = (member) => {
 		surname: member["surname"],
 		gender: member["gender"].charAt(0),
 		birthdate:  (bday.getMonth()+1) + "/" + bday.getDate()+ "/" + bday.getFullYear(),
-		street_name: member["firstname"],
+		street_name: member["street_name"],
 		house_number: member["houseNumber"],
 		postcode: member["postCode"],
 		city: member["city"],
