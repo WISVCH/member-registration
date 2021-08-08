@@ -35,7 +35,7 @@ class PaymentController(val memberService: MemberService, val paymentRepository:
 			.put("productKeys", jsonArr)
 			.put("returnUrl", info.returnUrl)
 			.put("method", info.method)
-			.put("webhook", "http://ch.tudelft.nl/registration/api/payment")
+			.put("webhook", "http://ch.tudelft.nl/register/api/payment")
 			.toString()
 		val formBody: okhttp3.RequestBody = JSONString.toRequestBody(JSON)
 
