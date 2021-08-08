@@ -19,7 +19,6 @@ const getPaymentsInfo = async (name: string, email: string, products: string[], 
 			name: name,
 			email: email,
 			productKeys: products,
-			returnUrl: "https://ch.tudelft.nl/registration/orderComplete",
 			method: paymentprovider
 		});
 	} catch (e) {

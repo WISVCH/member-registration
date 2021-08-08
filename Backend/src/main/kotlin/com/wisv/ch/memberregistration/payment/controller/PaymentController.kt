@@ -5,6 +5,7 @@ import com.wisv.ch.memberregistration.payment.model.OrderStatusDTO
 import com.wisv.ch.memberregistration.payment.model.PaidStatus
 import com.wisv.ch.memberregistration.payment.model.Payment
 import com.wisv.ch.memberregistration.payment.model.PaymentDTO
+import com.wisv.ch.memberregistration.payment.model.PaymentReference
 import com.wisv.ch.memberregistration.payment.service.PaymentRepository
 import okhttp3.*
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -35,7 +36,7 @@ class PaymentController(val memberService: MemberService, val paymentRepository:
 			.put("productKeys", jsonArr)
 			.put("returnUrl", info.returnUrl)
 			.put("method", info.method)
-			.put("webhook", "http://ch.tudelft.nl/register/api/payment")
+			.put("webhook", "https://ch.tudelft.nl/register/api/payment")
 			.toString()
 		val formBody: okhttp3.RequestBody = JSONString.toRequestBody(JSON)
 
@@ -63,16 +64,25 @@ class PaymentController(val memberService: MemberService, val paymentRepository:
 		return jsonData
 	}
 
+	@PostMapping("/complete")
+	fun orderCompleteCallback(@Validated @RequestBody info: PaymentReference) {
+		updatePaymentStatusByReference(info.reference)
+	}
+
 	@GetMapping
 	fun webHookEntryPoint(@Validated @RequestBody info: OrderStatusDTO) {
+		updatePaymentStatusByReference(info.publicReference)
+	}
+
+	private fun updatePaymentStatusByReference(reference: String) {
 		val request: Request = Request.Builder()
-			.url("https://ch.tudelft.nl/payments/api/orders/" + info.publicReference)
+			.url("https://ch.tudelft.nl/payments/api/orders/" + reference)
 			.build()
 
 		val call: Call = client.newCall(request)
 		val response: Response = call.execute()
 		val status: PaidStatus = PaidStatus.fromString(JSONObject(response.body?.string()).getString("status"))
-		val payment = paymentRepository.getByPublicReference(info.publicReference)
+		val payment = paymentRepository.getByPublicReference(reference)
 		payment.paymentStatus = status
 		paymentRepository.save(payment)
 	}
